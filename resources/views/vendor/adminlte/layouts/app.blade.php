@@ -30,10 +30,11 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="skin-blue sidebar-mini">
+
+
 <div id="app" v-cloak>
     <div class="wrapper">
-
-    @include('adminlte::layouts.partials.mainheader')
+      @include('adminlte::layouts.partials.mainheader')
 
     @include('adminlte::layouts.partials.sidebar')
 
@@ -45,6 +46,17 @@ desired effect
         <!-- Main content -->
         <section class="content">
             <!-- Your Page Content Here -->
+
+
+<!--Mensaje de alertas-->
+            @if (session()->has('flash_notification.message'))
+    <div class="alert alert-{{ session('flash_notification.level') }} alertas">
+        
+        {!! session('flash_notification.message') !!}
+    </div>
+            @endif
+<!--Fin Mensaje de alertas--> 
+          
             @yield('main-content')
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->

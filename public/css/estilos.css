@@ -1,0 +1,57 @@
+.table-user-reg {
+	margin: 0 auto;
+	
+
+}
+.alertas{	
+	float: right;	
+}
+
+.container{	
+	width: 100%;
+}
+#campos{
+
+}
+.textarea{
+	width: 100%;
+}
+.caja-btn-herr{
+	float: right;
+	
+	
+}
+.caja-btn-herr .dropdown-menu{
+	
+	margin-left:-110px !important;
+
+}
+.btn-herr-user{
+	border-radius: 5px;
+
+}
+.formulario > .row{
+	border-bottom:1px solid #E5E8E8;
+	margin-top: 2px;
+	padding: 5px;
+}
+.label-datos{
+	font-size: 14px;
+	padding: 10px;
+	border: 2px solid red;
+}
+#formIngresos .row{
+	
+	margin-top: 2px;
+	padding: 2px;
+}
+#resultadoDa .row{
+	
+	margin-top: 3px;
+	padding-top: 3px;
+	padding-bottom: 3px; 
+	
+}
+.btnInflab{
+	margin-left:  1px;
+}

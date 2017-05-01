@@ -41,7 +41,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin/users';
 
     /**
      * Create a new controller instance.
@@ -63,10 +63,12 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name'     => 'required|max:255',
+            'last_name' => 'sometimes|required|max:255',
             'username' => 'sometimes|required|max:255|unique:users',
+            'last_name' => 'sometimes|required|max:255',
             'email'    => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
-            'terms'    => 'required',
+            //'terms'    => 'required',
         ]);
     }
 
@@ -80,8 +82,10 @@ class RegisterController extends Controller
     {
         $fields = [
             'name'     => $data['name'],
+            'last_name'     => $data['last_name'],
             'email'    => $data['email'],
             'password' => bcrypt($data['password']),
+            'username' => $data['username'],
         ];
         if (config('auth.providers.users.field','email') === 'username' && isset($data['username'])) {
             $fields['username'] = $data['username'];
