@@ -15,7 +15,9 @@ class CreatedIngresosTipoTable extends Migration
     {
         Schema::create('creditos', function (Blueprint $table) {
             $table->increments('id');
+            $table->increments('id');
             $table->timestamps();
+
         });
     }
 
