@@ -25,8 +25,9 @@
           <div class="box-body">
             
             <div class="formulario">
-  {!! Form::open(['route'=>'users.store','method'=>'POST']) !!}
-      
+  {!! Form::open(['route'=>'users.store','method'=>'POST','id'=>'formNewUer']) !!}
+    {!! Form::hidden('username',null,['class'=>'form-control tipo','placeholder'=>'No Documento','id'=>'username']) !!}
+    {!! Form::hidden('password',null,['class'=>'form-control tipo','placeholder'=>'No Documento','id'=>'password']) !!}  
             <table class="table table-user-reg">
               <tr>
                 <td>
@@ -38,7 +39,7 @@
                 <td>
                   <div class="form-group">
       {!! Form::label('num_doc','No Documento') !!}
-      {!! Form::text('num_doc',null,['class'=>'form-control tipo','placeholder'=>'No Documento','required']) !!}           
+      {!! Form::text('num_doc',null,['class'=>'form-control tipo','placeholder'=>'No Documento','required','id'=>'num_doc']) !!}           
                  </div>                  
                 </td>
               </tr>

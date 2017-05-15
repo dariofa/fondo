@@ -18,45 +18,168 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 	//Usuarios
 	Route::resource('users','UsersController');
-	//index Usuario
-	Route::get('/listar/',[
-		'as'=>'admin.users.listar',
+	 
+	
+	//index Usuario buscado por ajax con datatables 
+	Route::get('/listar/users/',[
+		'as'=>'admin.users.listar.user',
 		'uses'=>'DataTablesController@listarUsers'
 		]);
-	//Buscar usuario ajax
+	//index tipos movimientosbuscado por ajax con datatables
+	Route::get('/listar/tiposIn/',[
+		'as'=>'admin.users.listar.tipo',
+		'uses'=>'DataTablesController@listarTiposIngresos'
+		]);
+	//index tipo de cuentas buscado por ajax con datatables
+	Route::get('/listar/tiposCuentas/',[
+		'as'=>'admin.users.listar.cuentas',
+		'uses'=>'DataTablesController@listarTiposCuentas'
+		]);
+	//index tipo de creditos buscado por ajax con datatables
+	Route::get('/listar/tiposCreditos/',[
+		'as'=>'admin.users.listar.creditos',
+		'uses'=>'DataTablesController@listarTiposCreditos'
+		]);
+	//index tipo de referencias buscado por ajax con datatables
+	Route::get('/listar/tiposReferencias/',[
+		'as'=>'admin.users.listar.referencias',
+		'uses'=>'DataTablesController@listarTiposReferencias'
+		]);
+	//Buscar usuario ajax para una nueva cuenta
 	Route::post('/users/buscar','UsersController@buscarUsersAjax');	
+	//Agregar un usuario via ajax pára una nueva cuenta
+	Route::post('/users/store/ajax/','UsersController@storeAjax');
 
-
+	//Consulta la informacionn laboral de un usuario
 	Route::post('/users/buscar/inflabo','UsersController@buscarUsersInfoLabo');		
 
-	//Agregar  informacion personal del usuario
-	Route::post('/users/agregarinflabo/{id}',[
+	//Agregar  informacion laboral del usuario
+	Route::post('/users/agregarinflabo/',[
 		'as'=>'admin.users.agregarinflabo',
 		'uses'=>'UsersController@agregarinflabo'
 		]);
 
-	//Editar  informacion personal del usuario
-	Route::get('/users/update/infLa/{id}',[
+	//Actualizar  informacion laboral del usuario
+	Route::post('/users/update/infLa',[
 		'as'=>'admin.users.editarinflabo',
 		'uses'=>'UsersController@editarinflabo'
 		]);
+	//Eliminar  informacion laboral del usuario
+	Route::get('/users/delete/infLa/{id}',[
+		'as'=>'admin.users.deleteInfLab',
+		'uses'=>'UsersController@eliminarinflabo'
+		]);
 
-	//Actualizar  informacion laboral del usuario
+		//Agregar  informacion profesional del usuario
+	Route::post('/users/agregarinfprof/',[
+		'as'=>'admin.users.agregarinfprof',
+		'uses'=>'UsersController@agregarinfprof'
+		]);
+	//Consulta la informacionn profesional de un usuario
+	Route::post('/users/buscar/infprof','UsersController@buscarUsersInfoProf');		
+	//Actualizar  informacion profesional del usuario
+	Route::post('/users/update/infprof',[
+		'as'=>'admin.users.editarinfprof',
+		'uses'=>'UsersController@editarinfprof'
+		]);
+	//Eliminar  informacion profesional del usuario
+	Route::get('/users/delete/infprof/{id}',[
+		'as'=>'admin.users.deleteInfProf',
+		'uses'=>'UsersController@eliminarinfprof'
+		]);
+
+	//Actualizar  informacion personal del usuario
 	Route::post('/users/updateper/{id}',[
 		'as'=>'admin.users.updateper',
 		'uses'=>'UsersController@updateInfPersonal'
 		]);
 
+	//listar  bienes del usuario
+	Route::resource('bienes','BienesController');
+	Route::post('/users/search/bienes',[
+		'as'=>'admin.users.search',
+		'uses'=>'BienesController@index'
+		]);
+	//add bienes
+	Route::post('/users/add/bien/',[
+		'as'=>'admin.users.add',
+		'uses'=>'BienesController@store'
+		]);
+	//actualizar bien
+	Route::post('/users/update/bienes',[
+		'as'=>'admin.users.update',
+		'uses'=>'BienesController@update'
+		]);
+	//eliminar bien
+	Route::get('/users/delete/bien/{id}',[
+		'as'=>'admin.users.delete',
+		'uses'=>'BienesController@destroy'
+		]);
+	//Eliminar  usuario
+	Route::get('/users/delete/{id}',[
+		'as'=>'admin.users.delete',
+		'uses'=>'UsersController@destroy'
+		]);
+ 
+ 
 	
-	//Ingresos
-	Route::resource('ingresos','IngresosController');
-	Route::get('/ingresos/create/{id}','IngresosController@create');
-	Route::post('/ingresos/store/','IngresosController@store');
+	//cuentas
+	Route::resource('cuentas','CuentasController');
+	Route::get('/cuentas/create/{id}','CuentasController@create');
+	Route::post('/cuentas/store/ajax','CuentasController@storeAjax'); 
+	Route::get('/cuentas/{id}','CuentasController@show');
 
-	//admin
-	Route::get('/admin/ingresos/show/','AdminController@indexIngresos');
+	//admin tipos de ingresos Movimientos Cuenta
+	Route::resource('tipos/ingresos','IngresosTipoController');
+	Route::post('/tipos/ingresos/registrar','IngresosTipoController@store');
+	Route::post('/tipos/movimientos/cuenta/buscar','IngresosTipoController@buscarAjax');
+	//Tipos de cuentas
+	Route::resource('tipos/cuentas','TipoCuentasController');
+	Route::post('/tipos/cuentas/store','TipoCuentasController@store'); 
+
+	//Tipos de creditos
+	Route::resource('tipos/creditos','CreditosTipoController');
+	Route::post('/tipos/creditos/store','CreditosTipoController@store');
+	Route::post('/tipos/interes/buscar/tasa/','CreditosTipoController@searchTasa'); 
+	//Tipos de referencias
+	Route::resource('tipos/referencias','ReferenciasTipoController');
+	Route::post('/tipos/referencias/store','ReferenciasTipoController@store'); 
+	Route::get('/tipos/referencias/',[
+		'as'=>'tipos.referencias.index',
+		'uses' => 'ReferenciasTipoController@index'
+		]
+
+		); 
 	
+	//Movimientos Cuentas o Movimientos
+	Route::resource('ingresos/cuentas','IngresosCuentasController');
+	Route::get('/ingresos/add/{num_cuenta}',[
+		'as'=>'admin.ingresos.add',
+		'uses'=>'IngresosCuentasController@create'
+		]);
+	Route::get('/cuentas/movimientos/view/{id}','IngresosCuentasController@show');
 
+	//Movimientos Creditos o Ingresos
+	Route::resource('ingresos/creditos','MovimientosCreditosController');
+	Route::get('/ingresos/creditos/view/{id}','MovimientosCreditosController@show');
+
+	
+	//creditos
+	Route::resource('creditos','CreditosController');
+	Route::get('/creditos/create/{id}','CreditosController@create');
+	Route::get('/creditos/change/status/{id}/{status}','CreditosController@changeStatus'); 
+	//Route::get('/creditos/{id}','CreditosController@show');
+
+	//referencias creditos
+	Route::resource('referencias','ReferenciasController');
+	Route::get('/referencias/create/{id}',[
+		'as'=>'admin.referencias.create',
+		'uses'=> 'ReferenciasController@create'
+		]);
+
+	//Route::post('/referencias/store/ajax','ReferenciasController@storeAjax'); 
+	//Route::get('/referencias/{id}','ReferenciasController@show');
+	
 
 
 

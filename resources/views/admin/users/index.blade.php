@@ -26,7 +26,7 @@
           <div class="box-body">
             
 
-            <table class="table table-hover table-striped" id="tabla-users">
+            <table class="" id="tabla-users">
               <thead>             
                 <th>Id</th>
                 <th>Nombre</th>

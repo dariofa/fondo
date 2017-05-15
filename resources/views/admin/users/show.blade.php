@@ -25,14 +25,14 @@
                         
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="{{ url('admin/ingresos/create',$user->id) }}">Nuevo Ingreso</a></li>
-                        <li><a href="#">Nuevo Credito</a></li>
+                        <li><a href="{{ url('admin/cuentas/create',$user->id) }}">Nueva Cuenta</a></li>
+                        <li><a href="#">Ver Cuentas</a></li>
                         
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Separated link</a></li>
                       </ul>
                 </div>       
-            </div>
+            </div> 
                
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -43,7 +43,7 @@
           </div>
           <div class="box-body">
             
-    		
+    		 
 <div id="exTab1" class="container">	
 <ul  class="nav nav-pills">
 			<li class="active">
@@ -51,11 +51,15 @@
 			</li>
 			<li><a href="#2a" id="buscarInfLabo" data-toggle="tab">Información laboral </a>
 			</li>
-			<li><a href="#3a" data-toggle="tab">Información Profesional</a>
+			<li><a href="#3a" id="buscarInfProf" data-toggle="tab">Información Profesional</a>
 			</li>
+      <li><a href="#4a" id="buscarInfPerf" data-toggle="tab">Perfil</a>
+      </li>
+      <li><a href="#5a" id="buscarBienes" data-toggle="tab">Bienes</a>
+      </li>
   		
 		</ul> 
-
+<hr>
 			<div class="tab-content clearfix">
 			  <div class="tab-pane active" id="1a">
           	
@@ -129,41 +133,41 @@
                     <div class="row">
                     <div class="col-md-2">
                          <div class="form-group" id="direccion">
-                        <label for="">Dirección</label>
+                        <label for=""><h5>Dirección</h5></label>
                          </div>
                     </div>
 
                     <div class="col-md-2">
                          <div class="form-group" id="cargo">
-                          <label for="">Cargo</label>
+                          <label for=""><h5>Cargo</h5></label>
                          </div>
                     </div>
                     <div class="col-md-2">
                          <div class="form-group" id="direccion">
-                        <label for="">Teléfono</label>
+                        <label for=""><h5>Teléfono</h5></label>
                          </div>
                     </div>
 
                     <div class="col-md-2">
                          <div class="form-group" id="cargo">
-                          <label for="">Sector o Barrio</label>
+                          <label for=""><h5>Sector o Barrio</h5></label>
                          </div>
                     </div>
 
                     <div class="col-md-2">
                          <div class="form-group" id="cargo">
-                          <label for="">Observaciones</label>
+                          <label for=""><h5>Observaciones</h5></label>
                          </div>
                     </div>
 
                     <div class="col-md-2">
                          <div class="form-group" id="cargo">
-                          <label for="">Acciones</label>
+                          <label for=""><h5>Acciones</h5></label>
                          </div>
                     </div>
                   </div>
                    
-                    <div id="resultadoDa">
+                    <div id="resultadoDa" class="container resulRef sombra">
                       
                     </div>
                   
@@ -172,24 +176,25 @@
 
 
                <hr>
-           
+            
                  
-                 <div id="campos">                
+                 <div id="camposLab" class="container resulRef sombra">                
 
-{!! Form::open(['route'=>['admin.users.agregarinflabo',$user->id],'method'=>'POST','id'=>'form']) !!}
-
+{!! Form::open(['route'=>['admin.users.agregarinflabo','user_id'=>$user->id],'method'=>'POST','id'=>'formGuaLab']) !!}
+   
                   <div class="row">
+
                     <div class="col-md-5">
                          <div class="form-group">
     {!! Form::label('direccion','Dirección') !!}
-    {!! Form::text('direccion',$user->direccion,['class'=>'form-control tipo','required']) !!}
+    {!! Form::text('direccion',$user->direccion,['class'=>'form-control tipo','required','id'=>'direccion']) !!}
                          </div>
                     </div>
 
                     <div class="col-md-5">
                          <div class="form-group">
     {!! Form::label('cargo','Cargo:') !!}
-    {!! Form::text('cargo',$user->cargo,['class'=>'form-control tipo','required']) !!}
+    {!! Form::text('cargo',$user->cargo,['class'=>'form-control tipo','required','id'=>'cargo']) !!}
                          </div>
                     </div>
                   </div>
@@ -198,14 +203,14 @@
                     <div class="col-md-5">
                          <div class="form-group">
     {!! Form::label('sector','Sector o Barrio') !!}
-    {!! Form::text('sector',$user->sector,['class'=>'form-control tipo','required']) !!}
+    {!! Form::text('sector',$user->sector,['class'=>'form-control tipo','required','id'=>'sector']) !!}
                          </div>
                     </div>
 
                     <div class="col-md-5">
                          <div class="form-group">
     {!! Form::label('telefono','Teléfono:') !!}
-    {!! Form::text('telefono',null,['class'=>'form-control tipo','required']) !!}
+    {!! Form::text('telefono',null,['class'=>'form-control tipo','required','id'=>'telefono']) !!}
                          </div>
                     </div>
                   </div>
@@ -213,13 +218,13 @@
                     <div class="col-md-10">
                          <div class="form-group">
     {!! Form::label('observaciones','Observaciones') !!}
-    {!! Form::textarea('observaciones',$user->observaciones,['class'=>'form-control textarea','required','rows'=>'3']) !!}
+    {!! Form::textarea('observaciones',$user->observaciones,['class'=>'form-control textarea','required','rows'=>'3','id'=>'observaciones']) !!}
                          </div>
                     </div>
 
                   </div>
           <div class="form-group">
-                     {!! Form::submit('Registrar',['class'=>'btn btn-success']) !!}
+                     {!! Form::submit('Registrar',['class'=>'btn btn-success','id'=>'btnGuaLa']) !!}
                   </div>
            {!! Form::close() !!}
  
@@ -232,13 +237,210 @@
 
 				</div>
         <div class="tab-pane" id="3a">
-          
+          <div class="datosLabUs ">
+                   <input type="text" value="{{ $user->id }}" id="user_id" hidden="true">
+                    <div class="row">
+                    <div class="col-md-2">
+                         <div class="form-group" id="direccion">
+                        <label for=""><h5>Nivel de Educación</h5></label>
+                         </div>
+                    </div>
+
+                    <div class="col-md-2">
+                         <div class="form-group" id="cargo">
+                          <label for=""><h5>Titulo Obtenido</h5></label>
+                         </div>
+                    </div>
+                    <div class="col-md-3">
+                         <div class="form-group" id="direccion">
+                        <label for=""><h5>Fecha Ob. Titulo</h5></label>
+                         </div>
+                    </div>
+
+                    <div class="col-md-2">
+                         <div class="form-group" id="cargo">
+                          <label for=""><h5>Observaciones</h5></label>
+                         </div>
+                    </div>
+
+                    <div class="col-md-2">
+                         <div class="form-group" id="cargo">
+                          <label for=""><h5>Acciones</h5></label>
+                         </div>
+                    </div>
+                  </div>
+                   
+                    <div id="resultadoInf" class=" container resulRef sombra">
+                      
+                    </div>                  
+                  </div>
+                  <hr>
+                  <div id="camposProf" class="resulRef sombra">                
+
+{!! Form::open(['route'=>['admin.users.agregarinfprof','user_id'=>$user->id],'method'=>'POST','id'=>'formGuaLab']) !!}
+   
+                  <div class="row">
+
+                    <div class="col-md-3">
+                         <div class="form-group">
+    {!! Form::label('nivel','Nivel de Educacion:') !!}
+    {!! Form::text('nivel',$user->direccion,['class'=>'form-control tipo','required','id'=>'nivel']) !!}
+                         </div>
+                    </div>
+
+                    <div class="col-md-3">
+                         <div class="form-group">
+    {!! Form::label('titulo','Titulo Obtenido:') !!}
+    {!! Form::text('titulo',$user->cargo,['class'=>'form-control tipo','required','id'=>'titulo']) !!}
+                         </div>
+                    </div>
+
+                    <div class="col-md-3">
+                         <div class="form-group">
+    {!! Form::label('fecha','Fecha Ob. Titulo') !!}
+    {!! Form::date('fecha',$user->sector,['class'=>'form-control tipo','required','id'=>'fecha']) !!}
+                         </div>
+                    </div>
+                  </div>
+                   <div class="row">
+                    <div class="col-md-9">
+                         <div class="form-group">
+    {!! Form::label('observaciones','Observaciones') !!}
+    {!! Form::textarea('observaciones',$user->observaciones,['class'=>'form-control textarea','required','rows'=>'3','id'=>'observaciones']) !!}
+                         </div>
+                    </div>
+                  </div>
+          <div class="form-group">
+                     {!! Form::submit('Registrar',['class'=>'btn btn-success','id'=>'btnGuaLa']) !!}
+                  </div>
+           {!! Form::close() !!}
+ 
+
+                 </div>
   
           
 				</div>
           <div class="tab-pane" id="4a">
-          
+              <!-- Formulario Informacion personal -->
+                    <div class="formulario">
+  {!! Form::open(['route'=>['users.update','user_id'=>$user->id],'method'=>'put']) !!}
+   {!! Form::hidden('user_id',$user->id) !!}           
+        
+            <table class="table table-user-reg">
+              <tr>
+                <td> 
+                  <div class="form-group">
+    {!! Form::label('type_doc','Tipo Doc.') !!}
+    {!! Form::select('type_doc',['cc'=>'Cedula Ciudanania','ce'=>'Cedula Extranjeria'],$user->type_doc,['class'=>'form-control','placeholder'=>'Seleccione...','required']) !!}
+                 </div>
+                </td>
+                <td>
+                  <div class="form-group">
+      {!! Form::label('num_doc','No Documento') !!}
+      {!! Form::text('num_doc',$user->num_doc,['class'=>'form-control tipo','placeholder'=>'Lugar de nacimiento','required']) !!}           
+                 </div>                  
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group">
+    {!! Form::label('name','Nombres:') !!}
+    {!! Form::text('name',$user->name,['class'=>'form-control tipo','placeholder'=>'Nombres','required']) !!} 
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group">
+    {!! Form::label('last_name','Apellidos:') !!}
+    {!! Form::text('last_name',$user->last_name,['class'=>'form-control tipo','placeholder'=>'Apellidos','required']) !!} 
+    
+                  </div>                 
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="form-group">
+    {!! Form::label('email','E-Mail') !!}
+    {!! Form::text('email',$user->email,['class'=>'form-control','placeholder'=>'Celular','required']) !!}
+                  </div>
+                </td>
+                <td>
+    {!! Form::label('direccion','Dirección Residencia:') !!}
+    {!! Form::text('direccion',$user->dir_res,['class'=>'form-control tipo','required']) !!}
+              
+                </td>
+              </tr>
+              
+            </table>      
+<div class="form-group">
+    {!! Form::submit('Registrar',['class'=>'btn btn-success']) !!}
+  </div>
+  {!! Form::close() !!}
+</div>
+
+            <!-- Fin Formulario Informacion personal -->
 				</div>
+
+<div class="tab-pane" id="5a">
+    <div class="datosBienes">
+        <input type="text" value="{{ $user->id }}" id="user_id" hidden="true">
+                    <div class="row">
+                          <div class="col-md-5">
+                               <div class="form-group" id="direccion">
+                              <label for=""><h5>Observaciones</h5></label>
+                               </div>
+                          </div>
+
+                          <div class="col-md-4">
+                               <div class="form-group" id="cargo">
+                                <label for=""><h5>Tipo</h5></label>
+                               </div>
+                          </div>
+                          <div class="col-md-3">
+                               <div class="form-group" id="cargo">
+                                <label for=""><h5>Acciones</h5></label>
+                               </div>
+                          </div>
+                  </div>
+                   
+                    <div id="resultadoBienes" class="container resultadoBienes sombra">
+                      
+                    </div>                  
+                  
+  </div>
+
+<hr>
+      <div class="formulario sombra">
+         {!! Form::open(['route'=>['admin.users.add','user_id'=>$user->id],'method'=>'post']) !!}
+           <div class="row">
+                <div class="col-md-6">
+                         <div class="form-group">
+    {!! Form::label('tipo','Tipo') !!}
+    {!! Form::select('tipo',['inmueble'=>'Inmueble','vehiculo'=>'Vehiculo','motocicleta'=>'Motocicleta','electrodomestico'=>'Electrodoméstico'],null,['class'=>'form-control','placeholder'=>'Seleccione...','required']) !!}    
+    
+                         </div>
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-md-9">
+                         <div class="form-group">
+    {!! Form::label('name','Observaciones') !!}
+    {!! Form::textarea('name',null,['class'=>'form-control','required','rows'=>'3','id'=>'name']) !!}
+                         </div>
+                </div>
+
+                <div class="form-group col-md-6">
+    {!! Form::submit('Registrar',['class'=>'btn btn-success']) !!}
+                </div>
+            </div>
+          
+
+
+         {!! Form::close() !!}
+      </div>
+  
+
+</div>
+
 			</div>
   </div>
        </div>

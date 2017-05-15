@@ -3,57 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\AdminIngreso;
-use App\User;
-use App\Ingreso;
-use DB;
-class AdminController extends Controller
+use App\ReferenciaTipo;
+
+class ReferenciasTipoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function indexIngresos()
+    public function index()
     {
-    /*    
-        $usersAdmin = DB::table('admin_ingresos')
-           ->leftJoin('users', 'users.id', '=', 'admin_ingresos.user_id')
-           ->leftJoin('ingresos', 'ingresos.user_id', '=', 'users.id')
-           //->leftJoin('users', 'users.id', '=', 'ingresos.user_id')
-            
-            ->get(); 
-
-       dd($users) ; */    
-
-         $usersRegistros = DB::table('admin_ingresos')
-           ->leftJoin('ingresos', 'ingresos.id', '=', 'admin_ingresos.ingresos_id')
-           ->leftJoin('users', 'users.id', '=', 'ingresos.user_id')
-           //->leftJoin('users', 'users.id', '=', 'ingresos.user_id')
-            
-            ->get(); 
-
-       dd($usersRegistros) ;     
-       /* $adminIngresos = AdminIngreso::all();
-
-        $adminIngresos->each(function($adminIngresos){
-        $adminIngresos->user;
-           
-            //dd($adminIngresos->ingreso);
-
-        });
-
-           
-
-        $user = User::all();
-//dd($user->ingresos);
-        $user->each(function($user){
-        $user->ingresos;
-            $user->ingresos;
-            dd($user->ingresos);
-
-        });*/
-     //return view('admin.ingresos.show',['ingresos'=>$ingresos]) ;
+       return view('admin.tipos.referencias');
     }
 
     /**
@@ -74,7 +35,9 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $referencia = new ReferenciaTipo($request->all());
+      $referencia->save();
+      return  redirect('admin/tipos/referencias/');
     }
 
     /**

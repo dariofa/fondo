@@ -15,7 +15,7 @@ class CreateReferenciasTipoTable extends Migration
     {
         Schema::create('referencias_tipo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name',30)->unique();
             $table->timestamps();
         });
     }

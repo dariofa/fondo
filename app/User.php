@@ -31,8 +31,6 @@ class User extends Authenticatable
         'est_civil',
         'eps',
         'celular',
-        'inf_prof',
-        'inf_labo',
         'id'       
     ];
 
@@ -45,22 +43,23 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function ingresos(){
-        return $this->hasMany('App\Ingreso');
+    public function cuentas(){
+        return $this->hasMany('App\Cuenta');
+    }
+    public function creditos(){
+        return $this->hasMany('App\Credito');
+    }
+    public function bienes(){
+        return $this->hasMany('App\Bien');
+    }
+
+    public function info_labo_user(){
+        return $this->hasMany('App\InfoLaboUser');
+    }
+     public function info_prof_user(){
+        return $this->hasMany('App\InfoProfUser');
     }
     
-    public function adminIngresos(){
-
-        
-        //return $this->hasmany(AdminIngreso::class);
-         return $this->hasmany('App\AdminIngreso');
-      } 
-/* 
-   public function adminIngresos(){
-        return $this->belongsToMany('App\Ingreso','ingresos_id','user_id');
-      }     
-*/
-
     public function scopeSearchUsers($query,$id)
     {
         return $query->where("id", '<>', "$id");

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Auth;
+use App\InfoLaboUser;
+use App\InfoProfUser;
 class UsersController extends Controller 
 {
 
@@ -16,127 +18,116 @@ class UsersController extends Controller
       } 
 
       public function buscarUsersInfoLabo(Request $request){
-        $user = User::find($request->id);
-        $inf_labo = $user->inf_labo;
-        $inf_labo=json_decode($inf_labo);
-        return response()->json($inf_labo);        
+        $user = InfoLaboUser::orderBy('id','ASC')->where('user_id','=', $request->id)->get();
+        return response()->json($user);        
       } 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {   
+      public function buscarUsersInfoProf(Request $request){
+        $user = InfoProfUser::orderBy('id','ASC')->where('user_id','=', $request->id)->get();
+        return response()->json($user);
+      }
+    
+    public function index(){   
         $id = Auth::id();
         $users = User::orderBy('id','ASC')->where('id','<>', $id)->paginate(4);
         return view('admin.users.index',["users"=>$users]) ;
            }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+    public function create(){
        return view('admin.users.create') ;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
+    
+    public function store(Request $request){
         $user = new User($request->all());
-        $user -> save();
-       
+        $user->password = bcrypt($request->password);
+        $user -> save();       
         flash::success('Usuario '.$user->name.' registrado con exito');
        return redirect()->route('users.index');
 
-           }
+    } 
+    public function storeAjax(Request $request){
+        $user = new User($request->all());
+        $user -> save();
+         flash::success('Usuario '.$user->name.' registrado con exito');
+       return redirect('admin/cuentas/create/'.$user->id);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
+    }
+    
+    public function show($id){
         $user = User::find($id);
       return view('admin.users.show',['user'=>$user]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
+     public function edit($id){
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function agregarinflabo(Request $request, $id)
-    {
-        $user = User::find($id); 
-        $inf_labo = $user->inf_labo;
-        $inf_labo=json_decode($inf_labo);
-        $inf_labo=(array) $inf_labo;
-        $NewLabo = (array) $request->all();        
-        array_push($inf_labo,$NewLabo);
-        $inf_labo = json_encode($inf_labo);
-        $user->inf_labo = $inf_labo;
-        $inf_laboral = json_decode($user->inf_labo);        //
-       $user->save();
-       
-      Flash::success('La Información laboral del usuario: '.$user->name.' ha sido agregada con exito');
-       
-      return redirect()->route('users.show',['user'=>$user]);
+    public function agregarinflabo(Request $request){
+        $user = User::find($request->user_id);
+        $newInfoLabo = new InfoLaboUser($request->all());
+        $newInfoLabo->save();
+       Flash::success('La Información laboral del usuario: '.$user->name.' ha sido agregada con exito');
+       return redirect()->route('users.show',['user'=>$user]);
     }
 
-     public function editarinflabo(Request $request, $id)
-    {
-        dd(json_encode($id));
+    public function editarinflabo(Request $request){
+
+        $user_info_lab = InfoLaboUser::find($request->id);
+        $user_info_lab->fill($request->all());
+        $user_info_lab->save();
+        $user = $user_info_lab->user;
+    Flash::success('La Información personal del usuario: '.$user->name.' ha sido agregada con exito');
+        return redirect()->route('users.show',['user'=>$user]);
     }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function updateInfPersonal(Request $request, $id)
-    {
-        //dd($request->all());
+    public function eliminarinflabo(Request $request){
+        $user_info_lab = InfoLaboUser::find($request->id);
+        $user_info_lab -> delete();
+        $user = $user_info_lab->user;
+        Flash::success('La Información personal del usuario: '.$user->name.' ha sido eliminada con exito');
+        return redirect()->route('users.show',['user'=>$user]);
+    }
+
+    public function agregarinfprof(Request $request){
+        $newInfoProf = new InfoProfUser($request->all());
+        $newInfoProf->save();
+        $user = $newInfoProf->user;
+       Flash::success('La Información profesional del usuario: '.$user->name.' ha sido agregada con exito');
+       return redirect()->route('users.show',['user'=>$user]);
+    }
+    public function editarinfprof(Request $request){
+        $user_info_prof = InfoProfUser::find($request->id);
+        $user_info_prof->fill($request->all());
+
+        $user_info_prof->save();
+        $user = $user_info_prof->user;
+    Flash::success('La Información profesional del usuario: '.$user->name.' ha sido agregada con exito');
+        return redirect()->route('users.show',['user'=>$user]);
+    }
+    public function eliminarinfprof(Request $request){
+        $user_info_prof = InfoProfUser::find($request->id);
+        $user_info_prof -> delete();
+        $user = $user_info_prof->user;
+        Flash::success('La Información personal del usuario: '.$user->name.' ha sido eliminada con exito');
+        return redirect()->route('users.show',['user'=>$user]);
+    }
+   
+    public function updateInfPersonal(Request $request, $id){
         $user = User::find($id);
         $user->fill($request->all());
         $user->save();
 
-        Flash::success('La Información personal del usuario: '.$user->name.' ha sido agregada con exito');
+        Flash::success('La Información personal del usuario: '.$user->name.' ha sido actualizada con exito');
         return redirect()->route('users.show',['user'=>$user]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::find($id);
-        $cadena = json_encode($request->all());
-        $user->inf_labo = $cadena ;     
+        $user = User::find($request->user_id);
+        $user->fill($request->all());
         $user->save();
-        return $cadena;
-        
+
+        Flash::success('El perfil del usuario: '.$user->name.' ha sido actualizada con exito');
+        return redirect()->route('users.show',['user'=>$user]);
     }
 
     /**
@@ -147,6 +138,9 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $user = User::find($id);
+        $user -> delete();
+       Flash::success('El usuario: '.$user->name.' ha sido eliminado con exito');
+        return redirect()->route('users.index');
     }
 }

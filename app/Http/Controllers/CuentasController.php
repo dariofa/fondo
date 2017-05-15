@@ -3,29 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Ingreso;
 use App\User;
-use App\AdminIngreso;
-use Carbon\Carbon;
-use Laracasts\Flash\Flash;
-use Illuminate\Support\Facades\Auth;
+use App\Cuenta;
+use App\MovimientoCuenta;
 
-class IngresosController extends Controller
+class CuentasController extends Controller
 {
-
-    public function __construct(){
-        Carbon::setLocale('es');
-    }
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-       return view('admin.ingresos.index');
-    }
+    { 
+        
+        $cuentas = Cuenta::orderBy('id','ASC')->get();
+         $cuentas ->each(function($cuentas){
+         $cuentas->user;               
+    });
 
+        return view('admin.cuentas.index',['cuentas'=>$cuentas]);  
+}
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -35,8 +34,7 @@ class IngresosController extends Controller
     {
         $user = User::find($id);
 
-        
-        return view('admin.ingresos.create',['user'=>$user]);
+        return view('admin.cuentas.create',['user'=>$user]);
     }
 
     /**
@@ -47,24 +45,17 @@ class IngresosController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
+        $cuenta = new Cuenta($request->all());
+        $cuenta->save();
+    }
 
-        $ingreso = new Ingreso($request->all());
-        $ingreso -> save(); 
-
-        $ingreso_admin = new AdminIngreso();
-        $id_user = Auth::id();
-        $ingreso_admin->user_id = $id_user;
-//dd($id_user);
-
-        //dd($id_user);
-        $ingreso_admin ->ingreso()->associate($ingreso);
-        $ingreso_admin ->save();
-
-
-        flash::success('Ingreso registrado con exito');
-       return redirect()->route('ingresos.index');
- 
+     public function storeAjax(Request $request)
+         {
+        $cuenta = new Cuenta($request->all());
+        $cuenta->save();
+       
+      //return $cuenta;
+      return response()->json($cuenta);   
     }
 
     /**
@@ -73,10 +64,18 @@ class IngresosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id) 
     {
-        //return view('admin.ingresos.show') ;
-   }
+       $cuentas = Cuenta::where('user_id', $id)->get();
+
+       $cuentas ->each(function($cuentas){
+            //$cuentas->categoria;
+            $cuentas->user;
+        });
+       return view('admin.cuentas.show',['cuentas'=>$cuentas]);
+
+       
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -98,7 +97,7 @@ class IngresosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      return "Hola mundo";
     }
 
     /**

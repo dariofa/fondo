@@ -36,15 +36,20 @@
             <li class="active"><a href="{{ url('/') }}"><i class='fa fa-link'></i> <span>Inicio</span></a></li>
             <li><a href="{{ route('users.index') }}"><i class='fa fa-link'></i> <span>Usuarios</span></a></li>
 
-            <li><a href="{{ route('ingresos.index') }}"><i class='fa fa-link'></i> <span>Ingresos</span></a></li>
-            <li><a href="{{ url('admin/admin/ingresos/show') }}"><i class='fa fa-link'></i> <span>Admin Ingresos</span></a></li>
+            <li><a href="{{ route('cuentas.index') }}"><i class='fa fa-link'></i> <span>Movimientos Cuentas</span></a></li>
+            <li><a href="{{ url('admin/cuentas') }}"><i class='fa fa-link'></i> <span>Cuentas</span></a></li>
+              <li><a href="{{ url('admin/creditos') }}"><i class='fa fa-link'></i> <span>Creditos</span></a></li>
             <li class="treeview">
-                <a href="#"><i class='fa fa-link'></i> <span>{{ trans('adminlte_lang::message.multilevel') }}</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class='fa fa-link'></i> <span>Admin Tipos</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
-                    <li><a href="#">{{ trans('adminlte_lang::message.linklevel2') }}</a></li>
+                    <li><a href="{{ url('admin/tipos/cuentas') }}">Tipos de Cuentas</a></li>
+                    <li><a href="{{ route('ingresos.index') }}">Tipos de Movimientos</a></li>
+                    <li><a href="{{ url('admin/tipos/creditos') }}">Tipos de Creditos</a></li>
+                     <li><a href="{{ route('tipos.referencias.index') }}">Tipos de Referencias</a></li>
+                    <li><a href="#">Referencias</a></li>
                 </ul>
             </li>
+             
         </ul><!-- /.sidebar-menu -->
     </section>
     <!-- /.sidebar -->
