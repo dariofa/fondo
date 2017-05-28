@@ -14,7 +14,8 @@ class CreditosTipoController extends Controller
      */
     public function index()
     {
-      return view('admin.tipos.creditos');
+      $creditos_tipo = CreditoTipo::orderBy('id','ASC')->paginate(10);
+      return view('admin.tipos.creditos',['creditos_tipo'=>$creditos_tipo]);
     }
 
     /**
@@ -63,9 +64,10 @@ class CreditosTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $creditos_tipo = CreditoTipo::find($request->id);
+        return response()->json($creditos_tipo);
     }
 
     /**
@@ -75,9 +77,12 @@ class CreditosTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $creditos_tipo = CreditoTipo::find($request->id);
+        $creditos_tipo->fill($request->all());
+        $creditos_tipo->save();
+        return  redirect('admin/tipos/creditos/');
     }
 
     /**
@@ -88,6 +93,9 @@ class CreditosTipoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $creditos_tipo = CreditoTipo::find($id);
+        $creditos_tipo->delete();
+        
+        return  redirect('admin/tipos/creditos/');
     }
 }

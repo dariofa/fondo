@@ -26,19 +26,48 @@
           <div class="box-body">
             
 
-            <table class="" id="tabla-users">
+            <table class="table table-bordered">
               <thead>             
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Email</th>    
+                <th>Nombres</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>E-mail</th>    
                 <th>Acciones</th>               
               </thead>
-              <tbody class="tabla">
-              
+              <tbody>
+              @foreach($users as $user)
+                    <tr>
+                    <td>
+                      {{ $user->name }} {{ $user->last_name }}
+                    </td>
+                    <td>
+                      {{ $user->dir_res }}
+                    </td>
+                    <td>
+                      {{ $user->telefono }}
+                    </td>
+                    <td>
+                      {{ $user->email }}
+                    </td>
+                    <td>
+                     <a href="/admin/users/{{ $user->id }}">
+                            <button type="button" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Editar">
+                               <i class="fa  fa-eye"></i>
+                            </button>
+                        </a>
+                        <a href="/admin/users/delete/{{ $user->id }}" onclick='return confirm("¿Está seguro de eliminar el registro?\nSe eliminaran todos los datos asociados a el.\nCuentas de ahorro, creditos y demas...")'>
+                            <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar">
+                               <i class="fa fa-trash"></i>
+                            </button>
+                        </a>
+                    </td>
+                    </tr>
 
+              @endforeach        
+      
               </tbody>
             </table>
-  
+  {{ $users->render() }}
 
   
        

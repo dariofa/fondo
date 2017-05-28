@@ -29,7 +29,7 @@ class Referencia extends Model
      	return $this->belongsTo('App\ReferenciaTipo','referencias_tipo_id');
      } */ 
 
-     public function credito(){
+     public function creditos(){
         return $this->belongsToMany('App\Credito','credito_referencias')->withPivot('referencia_tipo_id','parentesco');
     }  
 

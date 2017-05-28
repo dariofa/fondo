@@ -18,7 +18,10 @@ class ReferenciasController extends Controller
      */
     public function index()
     {
-       
+    //$tipo_ref = ReferenciaTipo::orderBy("id","ASC")->pluck('name','id');
+    $referencias = Referencia::all(); 
+     return view('admin.ref_creditos.index',['referencias'=>$referencias]);
+     
     }
 
     /**
@@ -40,7 +43,7 @@ class ReferenciasController extends Controller
       //$referencia =  Referencia::find(10);
         //$num = count($creditos->referencias);
         //dd($creditos->referencias_tipo);
-        return view('admin.ref_creditos.index',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref]);
+        return view('admin.ref_creditos.create',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref]);
     }
 
     /**
@@ -101,7 +104,9 @@ class ReferenciasController extends Controller
      */
     public function show($id)
     {
-        //
+        $referencia = Referencia::find($id); 
+        return view('admin.ref_creditos.show',['referencia'=>$referencia]);
+     
     }
 
     /**
@@ -122,9 +127,15 @@ class ReferenciasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
-        //
+        
+        $referencia = Referencia::find($id);
+        $referencia->fill($request->all());
+        $referencia->save();
+        flash::success('La referencia '.$referencia->name.' ha sido actualizada con éxito');
+       return redirect('admin/referencias/view/'.$id);
+        
     }
 
     /**
@@ -135,13 +146,16 @@ class ReferenciasController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $referencia = Referencia::find($id);
+      $referencia->delete();
+       flash::success('La referencia '.$referencia->name.' ha sido eliminada con éxito');
+       return redirect('admin/referencias/');
     }
 
      public function searchAjax(Request $request)
     {
         //dd( $request->num_doc);
-        $referencia = Referencia::where('num_doc','=',$request->num_doc)->orWhere('id','=',$request->id)->get();
+        $referencia = Referencia::where('num_doc','=',$request->id)->orWhere('id','=',$request->id)->get();
 
         //dd($referencia);
         return response()->json($referencia); 

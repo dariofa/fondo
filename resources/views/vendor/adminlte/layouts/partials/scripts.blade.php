@@ -17,6 +17,7 @@
     ]) !!};
     
 		$('div.alertas').not('.alert-important').delay(2000).fadeOut(350);
+    $('div.alertas-error').not('.alert-important').delay(3000).fadeOut(150);
 	
 		datosLaborales = [];
 		
@@ -311,7 +312,7 @@ $("#resultadoBienes").append(row);
  
       function addTipoIngreso(){
        name = $('#name').val();
-       categoria = $('#categoria').val();
+       categoria = $('#categorias').val();
        tipo_mov = $('#tipo_mov').val();
         urli = "/admin/tipos/ingresos/registrar";
        

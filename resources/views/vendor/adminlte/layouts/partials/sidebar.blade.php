@@ -34,20 +34,24 @@
             <li class="header">{{ trans('adminlte_lang::message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
             <li class="active"><a href="{{ url('/') }}"><i class='fa fa-link'></i> <span>Inicio</span></a></li>
+
              
             <li><a href="{{ route('users.index') }}"><i class='fa fa-link'></i> <span>Usuarios</span></a></li>
+             <li><a href="{{ route('fondos.index') }}"><i class='fa fa-link'></i> <span>Fondos</span></a></li>
 
             <li><a href="{{ route('cuentas.index') }}"><i class='fa fa-link'></i> <span>Movimientos Cuentas</span></a></li>
+             <li><a href="{{ route('proyeccion.index') }}"><i class='fa fa-link'></i> <span>Proyección</span></a></li>
             <li><a href="{{ url('admin/cuentas') }}"><i class='fa fa-link'></i> <span>Cuentas</span></a></li>
               <li><a href="{{ url('admin/creditos') }}"><i class='fa fa-link'></i> <span>Creditos</span></a></li>
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>Admin Tipos</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
+                    <li><a href="{{ url('admin/tipos/fondos') }}">Tipos de Cuentas</a></li>
                     <li><a href="{{ url('admin/tipos/cuentas') }}">Tipos de Cuentas</a></li>
                     <li><a href="{{ route('ingresos.index') }}">Tipos de Movimientos</a></li>
                     <li><a href="{{ url('admin/tipos/creditos') }}">Tipos de Creditos</a></li>
                      <li><a href="{{ route('tipos.referencias.index') }}">Tipos de Referencias</a></li>
-                    <li><a href="#">Referencias</a></li>
+                    <li><a href="{{ url('admin/referencias') }}">Referencias</a></li>
                 </ul>
             </li>
              

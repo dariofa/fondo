@@ -67,19 +67,15 @@ public function listarTiposIngresos()    {
 public function listarTiposCuentas()    {
         
       $model = CuentaTipo::all();
-      //$id = IngresoTipo::id();
-      //$model = User::orderBy('id','ASC')->where('id','<>', $id);
-        
-      //return view('admin.users.index','users'=>$users);
+      //$json = json_encode($model);
 
-
-  return Datatables::collection($model)->addColumn('intro',function($model){
+      return Datatables::collection($model)->addColumn('intro',function($model){
       $boton = '<a href="#">
-                            <button type="button" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Editar">
+                            <button onclick="openModal('.$model->id.')" type="button" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Editar">
                                <i class="fa  fa-eye"></i>
                             </button>
                         </a>
-                        <a href="#">
+                        <a href="/admin/tipos/cuentas/delete/'.$model->id.'" onclick=\'return confirm("¿Está seguro de eliminar el registro?")\'>
                             <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar">
                                <i class="fa fa-trash"></i>
                             </button>

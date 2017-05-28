@@ -14,7 +14,8 @@ class ReferenciasTipoController extends Controller
      */
     public function index()
     {
-       return view('admin.tipos.referencias');
+        $referencias_tipo = ReferenciaTipo::orderBy('id','ASC')->paginate(10);
+       return view('admin.tipos.referencias',['referencias_tipo'=>$referencias_tipo]);
     }
 
     /**
@@ -57,9 +58,10 @@ class ReferenciasTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $referencia = ReferenciaTipo::find($request->id);
+        return response()->json($referencia);
     }
 
     /**
@@ -69,9 +71,12 @@ class ReferenciasTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $referencias_tipo = ReferenciaTipo::find($request->id);
+        $referencias_tipo->fill($request->all());
+        $referencias_tipo->save();
+        return  redirect('admin/tipos/referencias/');
     }
 
     /**
@@ -82,6 +87,8 @@ class ReferenciasTipoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $referencias_tipo = ReferenciaTipo::find($id);
+        $referencias_tipo->delete();
+        return  redirect('admin/tipos/referencias/');
     }
 }

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
+use Illuminate\Validation\Rule;
+use App\Http\Requests\UserRequest;
 use App\User;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +40,7 @@ class UsersController extends Controller
     }
 
     
-    public function store(Request $request){
+    public function store(UserRequest $request){
         $user = new User($request->all());
         $user->password = bcrypt($request->password);
         $user -> save();       
@@ -45,7 +48,7 @@ class UsersController extends Controller
        return redirect()->route('users.index');
 
     } 
-    public function storeAjax(Request $request){
+    public function storeAjax(UserRequest $request){
         $user = new User($request->all());
         $user -> save();
          flash::success('Usuario '.$user->name.' registrado con exito');
@@ -122,12 +125,26 @@ class UsersController extends Controller
 
     public function update(Request $request)
     {
-        $user = User::find($request->user_id);
-        $user->fill($request->all());
-        $user->save();
+          $user = User::find($request->user_id); 
 
-        Flash::success('El perfil del usuario: '.$user->name.' ha sido actualizada con exito');
-        return redirect()->route('users.show',['user'=>$user]);
+          $validator = Validator::make($request->all(), [
+            'num_doc' =>['required', Rule::unique('users')->ignore($user->id, 'id')],
+            'email' => Rule::unique('users')->ignore($user->id, 'id')
+          ]);
+
+          if ($validator->fails()) {
+            return redirect()->route('users.show',['user'=>$user])
+                        ->withErrors($validator)
+                        ->withInput();
+        }else{
+          $user->fill($request->all());
+          $user->save();
+          Flash::success('El perfil del usuario: '.$user->name.' ha sido actualizada con exito'); 
+          return redirect()->route('users.show',['user'=>$user]); 
+        }           
+        
+
+        
     }
 
     /**
@@ -139,7 +156,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
        $user = User::find($id);
-        $user -> delete();
+       $user -> delete();
        Flash::success('El usuario: '.$user->name.' ha sido eliminado con exito');
         return redirect()->route('users.index');
     }

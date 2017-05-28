@@ -1,10 +1,6 @@
 .table-user-reg {
 	margin: 0 auto;
 }
-#tabla-tipos-ingresos{
-	width: 100% !important;
-
-}
 #tabla-tipos-cuentas{
 	width: 100% !important;
 
@@ -112,7 +108,8 @@ margin-top: 3px;
 }
 .ingresos-container .tabla-tipo-ing{
 
-	width: 80% !important;
+	width: 60% !important;
+	margin: 0 auto;
 	
 }
 .container-new-cuenta{
@@ -173,4 +170,11 @@ box-shadow: -1px 6px 6px 0px rgba(0,0,0,0.75);
 }
 .activa{
 	background: #95D8E4;
+}
+.form-ref{
+	background: #E6E6E6;
+}
+.table-dividendos{
+	width: 70%;
+	margin: auto;
 }

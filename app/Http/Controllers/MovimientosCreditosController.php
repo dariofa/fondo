@@ -132,7 +132,11 @@ return redirect('admin/creditos');
         $saldo_anterior = $credito->saldo;
         $new_saldo = $saldo_anterior - $total_pago;
         $credito->saldo = $new_saldo;
-        if ($credito->saldo <= 0) $credito->estado = 'pagado';
+
+        if ($credito->saldo <= 0){
+            $credito->estado = 'pagado';
+             $credito->saldo = 0;
+        } 
         $credito->save();
         $ahorro = $credito->getAhorro($credito);
 

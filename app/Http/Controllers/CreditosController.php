@@ -102,7 +102,7 @@ class CreditosController extends Controller
 
        $movimiento = new MovimientoCredito();
        $num_cuotas = $creditos->nu_cuotas;
-       $valor = $creditos->saldo / $num_cuotas;
+       $valor = ceil($creditos->saldo / $num_cuotas);
        //$fecha_act = $creditos->fecha_act;
        //dd($creditos->forma_pago);
        if ($creditos->forma_pago=='mensual') {
@@ -116,10 +116,6 @@ class CreditosController extends Controller
        }
        
        $ahorro = $creditos->getAhorro($creditos);
-       
-
-  //dd($ganancia);
-
        $listado = $movimiento->parrilla($num_cuotas,$valor,$forma_pago);
 
      return view('admin.creditos.show',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref,'listado'=>$listado,'ahorro'=>$ahorro]);

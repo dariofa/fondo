@@ -6,6 +6,16 @@
 
 
 @section('main-content')
+ 
+  @if(count($errors)>0)
+  <div class="alertas-error alert alert-danger">
+     <ul>
+    @foreach($errors->all() as $error)
+      <li> {{ $error }} </li>
+    @endforeach
+  </ul>
+  </div>
+@endif
   <div class="container-fluid spark-screen">
     <div class="row">
       <div class="col-md-12">
@@ -391,7 +401,7 @@
                 <td>
                   <div class="form-group">
     {!! Form::label('email','E-Mail') !!}
-    {!! Form::text('email',$user->email,['class'=>'form-control','placeholder'=>'Celular','required']) !!}
+    {!! Form::email('email',$user->email,['class'=>'form-control','placeholder'=>'E-mail','required']) !!}
                   </div>
                 </td>
                 <td>

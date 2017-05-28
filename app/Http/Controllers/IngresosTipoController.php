@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\MovimientoTipo;
+use Laracasts\Flash\Flash;
 
 class IngresosTipoController extends Controller
 {
@@ -14,8 +15,8 @@ class IngresosTipoController extends Controller
      */
     public function index()
     {
-        
-       return view('admin.tipos.ingresos');
+    $tipos_movimientos = MovimientoTipo::orderBy('id','ASC')->paginate(10);
+       return view('admin.tipos.ingresos',['tipos_movimientos'=>$tipos_movimientos]);
     }
  
     /**
@@ -38,8 +39,9 @@ class IngresosTipoController extends Controller
     { 
         $tipo = new MovimientoTipo($request->all());
         $tipo -> save();
-        return response()->json($tipo);      
-       
+       // return response()->json($tipo);    
+       Flash::success('La Información  ha sido agregada con exito');
+      return  redirect('admin/tipos/ingresos/');
     }
 
     /**
@@ -59,9 +61,11 @@ class IngresosTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $tipos_movimientos = MovimientoTipo::find($request->id);
+        //dd($request->all());
+        return response()->json($tipos_movimientos);
     }
 
     /**
@@ -71,9 +75,13 @@ class IngresosTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $movimientos = MovimientoTipo::find($request->id);
+        $movimientos->fill($request->all());
+        $movimientos->save();
+         return  redirect('admin/tipos/ingresos/');
+       // dd($request->all());
     }
 
     /**
@@ -84,8 +92,9 @@ class IngresosTipoController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
+        $movimientos = MovimientoTipo::find($id);
+        $movimientos->delete();
+        return  redirect('admin/tipos/ingresos/');    }
 
      public function buscarAjax(Request $request){
       $movimientos = MovimientoTipo::where('tipo', '=',($request->num_cuenta))->where('categoria', '<>','credito')->get();

@@ -133,23 +133,36 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 	Route::resource('tipos/ingresos','IngresosTipoController');
 	Route::post('/tipos/ingresos/registrar','IngresosTipoController@store');
 	Route::post('/tipos/movimientos/cuenta/buscar','IngresosTipoController@buscarAjax');
+	Route::post('/tipos/movimientos/buscar','IngresosTipoController@edit');
+	Route::post('/tipos/movimientos/update','IngresosTipoController@update');
+	Route::get('/tipos/movimientos/delete/{id}','IngresosTipoController@destroy');
+	
 	//Tipos de cuentas
 	Route::resource('tipos/cuentas','TipoCuentasController');
 	Route::post('/tipos/cuentas/store','TipoCuentasController@store'); 
+	Route::post('/tipos/cuentas/edit','TipoCuentasController@edit'); 
+	Route::post('/tipos/cuentas/update','TipoCuentasController@update');
+	Route::get('/tipos/cuentas/delete/{id}','TipoCuentasController@destroy'); 
+	
 
 	//Tipos de creditos
 	Route::resource('tipos/creditos','CreditosTipoController');
 	Route::post('/tipos/creditos/store','CreditosTipoController@store');
-	Route::post('/tipos/interes/buscar/tasa/','CreditosTipoController@searchTasa'); 
+	Route::post('/tipos/interes/buscar/tasa/','CreditosTipoController@searchTasa');
+	Route::post('/tipos/creditos/edit/','CreditosTipoController@edit'); 
+	Route::post('/tipos/creditos/update/','CreditosTipoController@update'); 
+	Route::get('/tipos/creditos/delete/{id}','CreditosTipoController@destroy'); 
+	 
 	//Tipos de referencias
 	Route::resource('tipos/referencias','ReferenciasTipoController');
 	Route::post('/tipos/referencias/store','ReferenciasTipoController@store'); 
 	Route::get('/tipos/referencias/',[
 		'as'=>'tipos.referencias.index',
 		'uses' => 'ReferenciasTipoController@index'
-		]
-
-		); 
+		]); 
+	Route::post('/tipos/referencias/edit','ReferenciasTipoController@edit'); 
+	Route::post('/tipos/referencias/update','ReferenciasTipoController@update'); 
+	Route::get('/tipos/referencias/delete/{id}','ReferenciasTipoController@destroy'); 
 	
 	//Movimientos Cuentas o Movimientos
 	Route::resource('ingresos/cuentas','IngresosCuentasController');
@@ -181,12 +194,21 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 		]);
 	Route::post('/referencias/buscar','ReferenciasController@searchAjax');
 	Route::get('/referencias/delete/{idRef}/{idCre}','ReferenciasController@delete');
+	Route::post('/referencias/update/{id}','ReferenciasController@update');
+	Route::get('/referencias/view/{id}','ReferenciasController@show');
+	Route::get('/referencias/delete/{id}','ReferenciasController@destroy');
 
 	//Route::post('/referencias/store/ajax','ReferenciasController@storeAjax'); 
 	//Route::get('/referencias/{id}','ReferenciasController@show');
 	//pdf
 	Route::get('/reportes/credito/{id}','PdfController@reporteCredito');
 	Route::get('/reportes/cuenta/movimientos/{id}','PdfController@reporteMoviCuenta');
+	
+	//Fondos
+	Route::resource('/fondos','FondosController');
+
+	//Proyeccion
+	Route::resource('/proyeccion','ProyeccionController');
 
 
 

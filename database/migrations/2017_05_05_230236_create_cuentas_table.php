@@ -17,6 +17,7 @@ class CreateCuentasTable extends Migration
             $table->increments('id');
             $table->string('num_cuenta',30)->unique();
             $table->integer('saldo');
+            $table->enum('estado',['activa','inactiva'])->default('activa');
             $table->integer('saldo_anterior');
 
             $table->integer('cuenta_tipo_id')->unsigned();

@@ -105,67 +105,10 @@ $("#totalPag").html(total);
    });
 
    $("#num_doc").blur(function(){
-valor = $(this).val();
-//console.log(valor);
- urli =  "/admin/referencias/buscar";
-     $.ajax({
-                url: urli,
-                type: 'POST',
-                cache: false,
-                data: {'num_doc':valor},                
-                beforeSend: function(xhr){
-                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
-                },
-                success: function(respu) {                     
-                 res =  isEmptyJSON(respu);
-                console.log(respu);
-                 console.log(valor);
-                 if (!res) {
-                  $("#lug_exp_doc").val(respu[0].lug_exp_doc);
-                  $("#name").val(respu[0].name);
-                  $("#last_name").val(respu[0].last_name);
-                  $("#direccion").val(respu[0].direccion);
-                  $("#telefono").val(respu[0].telefono);
-                  $("#email").val(respu[0].email);
-                  $("#ing_mensuales").val(respu[0].ing_mensuales);
-                  $("#referencia_id").val(respu[0].id);
-
-                  $("#referencia_id").removeAttr("disabled");
-                  $("#lug_exp_doc").attr("readonly",'readonly');
-                  $("#name").attr("readonly",'readonly');
-                  $("#last_name").attr("readonly",'readonly');
-                  $("#direccion").attr("readonly",'readonly');
-                  $("#telefono").attr("readonly",'readonly');
-                  $("#email").attr("readonly",'readonly');
-                  $("#ing_mensuales").attr("readonly",'readonly');
-                  $("#type_doc").attr("readonly",'readonly');
-                }else{
-                   $("#referencia_id").attr("disabled",'disabled');
-                   $("#lug_exp_doc").removeAttr("readonly");
-                  $("#name").removeAttr("readonly");
-                  $("#last_name").removeAttr("readonly");
-                  $("#direccion").removeAttr("readonly");
-                  $("#telefono").removeAttr("readonly");
-                  $("#email").removeAttr("readonly");
-                  $("#ing_mensuales").removeAttr("readonly");
-                  $("#type_doc").removeAttr("readonly");
-
-                  $("#lug_exp_doc").val('');
-                  $("#name").val('');
-                  $("#last_name").val('');
-                  $("#direccion").val('');
-                  $("#telefono").val('');
-                  $("#email").val('');
-                  $("#ing_mensuales").val('');
-                  $("#referencia_id").val('');
-                }                    //console.log(v);
-                  },
-                error: function(xhr, textStatus, thrownError) {
-                  
-                   alert("error");
-                    
-                }
-             });
+    id = $(this).val();
+    tip = "create";
+    
+    searchRef(id,tip);
 
    });
    ////////////////////////////////////////////////////////////////////////////
@@ -217,7 +160,7 @@ valor = $(this).val();
       valor = $(this).val();
       interes = $("#tasa_interes").val();
 
-      if (valor>500000 && valor !="" ) {
+      if (valor>=100000 && valor !="" ) {
         interes = valor * (20/100);
         nuevo_saldo = parseInt(interes) + parseInt(valor);
         $("#num_cuotas").val('');
@@ -327,9 +270,95 @@ function confirmar(){
   }
 
 }
-function searchRef(id){
-       urli = "/admin/referencias/buscar/";
-       $.ajax({
+function searchRef(id,tip){
+      urli =  "/admin/referencias/buscar";
+     $.ajax({
+                url: urli,
+                type: 'POST',
+                cache: false,
+                data: {'id':id},                
+                beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
+                },
+                success: function(respu) {                     
+                 res =  isEmptyJSON(respu);
+                  console.log(respu);
+                 console.log(id);
+                 if (!res) {
+                  $("#lug_exp_doc").val(respu[0].lug_exp_doc);
+                  $("#name").val(respu[0].name);
+                  $("#last_name").val(respu[0].last_name);
+                  $("#direccion").val(respu[0].direccion);
+                  $("#telefono").val(respu[0].telefono);
+                  $("#email").val(respu[0].email);
+                  $("#ing_mensuales").val(respu[0].ing_mensuales);
+                  $("#referencia_id").val(respu[0].id);
+                    if (tip!='edit') {
+                  $("#referencia_id").removeAttr("disabled");
+                  $("#lug_exp_doc").attr("readonly",'readonly');
+                  $("#name").attr("readonly",'readonly');
+                  $("#est_laboral").attr("readonly",'readonly');
+                  $("#last_name").attr("readonly",'readonly');
+                  $("#direccion").attr("readonly",'readonly');
+                  $("#telefono").attr("readonly",'readonly');
+                  $("#email").attr("readonly",'readonly');
+                  $("#ing_mensuales").attr("readonly",'readonly');
+                  $("#type_doc").attr("readonly",'readonly');
+                } 
+                if (tip=='edit') {
+                $("#num_doc").val(respu[0].num_doc);
+                $("#parentesco").attr("readonly",'readonly');
+                 var form = $( "#form-ref" );
+                 form.addClass( "form-ref" );
+
+                 $("#form-add-ref").attr('action','/admin/referencias/update');
+                 //$("#form-add-ref").attr('method','put');
+                 $("#btn-add-ref").removeClass( "btn-success" ).addClass( "btn-primary" );
+                 $("#btn-add-ref").val( "Actualizar" );
+                 $("#num_doc").removeClass( "num_documento" );
+                  $("html, body").animate({
+                   scrollTop: 390
+                  }, 1000);
+                }
+                 
+                }else{
+                  $("#referencia_id").attr("disabled",'disabled');
+                  $("#lug_exp_doc").removeAttr("readonly");
+                  $("#name").removeAttr("readonly");
+                  $("#last_name").removeAttr("readonly");
+                  $("#direccion").removeAttr("readonly");
+                  $("#telefono").removeAttr("readonly");
+                  $("#email").removeAttr("readonly");
+                  $("#ing_mensuales").removeAttr("readonly");
+                  $("#type_doc").removeAttr("readonly");
+
+                  $("#lug_exp_doc").val('');
+                  $("#name").val('');
+                  $("#last_name").val('');
+                  $("#direccion").val('');
+                  $("#telefono").val('');
+                  $("#email").val('');
+                  $("#ing_mensuales").val('');
+                  $("#referencia_id").val('');
+                }                    //console.log(v);
+                  },
+                error: function(xhr, textStatus, thrownError) {
+                  
+                   alert("error");
+                    
+                }
+             });
+}
+
+function openModal(id){
+ buscarCuenta(id);
+
+ // 
+}
+
+function buscarCuenta(id){
+   urli =  "/admin/tipos/cuentas/edit";
+    $.ajax({
                 url: urli,
                 type: 'POST',
                 cache: false,
@@ -338,6 +367,103 @@ function searchRef(id){
                   xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
                 },
                 success: function(respu) {
+                  $("#myModal").modal('show');
+                  $("#cate").val(respu.name);
+                  $("#id").val(respu.id);
+                     console.log(respu);
+                  },
+                error: function(xhr, textStatus, thrownError) {
+                  
+                   alert("error");
+                    
+                }
+             });
+}
+
+function openModalMovi(id){
+  buscarCuentaTiposMovi(id);
+}
+
+function buscarCuentaTiposMovi(id){
+   urli =  "/admin/tipos/movimientos/buscar";
+    $.ajax({
+                url: urli,
+                type: 'POST',
+                cache: false,
+                data: {'id':id},                
+                beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
+                },
+                success: function(respu) {
+                  $("#myModal").modal('show');
+                  //$("#cate").val(respu.name);
+                  $("#id").val(respu.id);
+                  $("#names").val(respu.name);
+                  $("#tipo").val(respu.tipo);
+                  $("#categoria").val(respu.categoria);
+
+                     console.log(respu);
+                  },
+                error: function(xhr, textStatus, thrownError) {
+                  
+                   alert("error");
+                    
+                }
+             });
+}
+
+function openModalCred(id){
+  buscarCreditosTipos(id);
+}
+
+function buscarCreditosTipos(id){
+   urli =  "/admin/tipos/creditos/edit";
+    $.ajax({
+                url: urli,
+                type: 'POST',
+                cache: false,
+                data: {'id':id},                
+                beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
+                },
+                success: function(respu) {
+                  $("#myModal").modal('show');
+                  $("#tasa_interes").val(respu.tasa_interes);
+                  $("#name").val(respu.name);
+                 $("#id").val(respu.id);
+                 // $("#tipo").val(respu.tipo);
+                 // $("#categoria").val(respu.categoria);
+
+                     console.log(respu);
+                  },
+                error: function(xhr, textStatus, thrownError) {
+                  
+                   alert("error");
+                    
+                }
+             });
+}
+function openModalRefTi(id){
+buscarRefTipos(id);
+}
+
+function buscarRefTipos(id){
+   urli =  "/admin/tipos/referencias/edit";
+    $.ajax({
+                url: urli,
+                type: 'POST',
+                cache: false,
+                data: {'id':id},                
+                beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
+                },
+                success: function(respu) {
+                  $("#myModal").modal('show');
+                  $("#name").val(respu.name);
+                  $("#id").val(respu.id);
+                 // $("#tipo").val(respu.tipo);
+                 // $("#categoria").val(respu.categoria);
+
                      console.log(respu);
                   },
                 error: function(xhr, textStatus, thrownError) {

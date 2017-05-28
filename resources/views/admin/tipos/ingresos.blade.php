@@ -26,34 +26,29 @@
 
           <div class="box-body">
             <div class="row">
+            {!! Form::open(['url' => 'admin/tipos/ingresos/registrar/', 'method' => 'post']) !!}
                    <div class="col-lg-4">                  
-                        
-                          <input type="text" id="name" class="form-control" placeholder="Nombre del movimiento">
-                          
-                                   
+                    {{ Form::text('name',null, ['placeholder' => 'Nombre del tipo de cuenta','class'=>'form-control','id'=>'name','required']) }}          
                     </div><!-- /.col-lg-6 -->  
-                    <div class="col-lg-4">      
-
-                    {{ Form::select('tipo_mov', ['cuenta' => 'Depositos','retiro'=>'Retiros a Cuenta'], null, ['placeholder' => 'Tipo','class'=>'form-control','id'=>'tipo_mov']) }}            
-                        
-                          
-                                           
+                    <div class="col-lg-4">   
+                     {{ Form::select('tipo', ['cuenta' => 'Depositos','retiro'=>'Retiros a Cuenta'], null, ['placeholder' => 'Tipo','class'=>'form-control','id'=>'tipo_mov']) }}   
                     </div><!-- /.col-lg-6 -->  
                      <div class="col-lg-4">                  
                         <div class="input-group">
-                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categoria']) }}
+                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categorias']) }}
                         
                           <span class="input-group-btn">
-                            <button id="add-tipo-ing" class="btn btn-success" type="button"><i class="fa fa-cog"></i></button>
+                            <button id="" class="btn btn-success" type="submit"><i class="fa fa-cog"></i></button>
                           </span>
                         </div><!-- /input-group -->                    
-                    </div><!-- /.col-lg-6 -->  
+                    </div><!-- /.col-lg-6 --> 
+               {!! Form::close() !!}      
             </div>
 <hr>
               <!--Encabezado -->
             <div class="row">
  <div class="col-lg-12">                
-          <table class="table table-hover table-striped tabla-tipo-ing" id="tabla-tipos-ingresos">
+          <table class="table table-hover table-striped">
               <thead>             
                 <th>Id</th>
                 <th>Nombre</th> 
@@ -61,8 +56,36 @@
                 <th>Categoria</th>                 
                 <th>Acciones</th>               
               </thead>
-              <tbody class="tabla">
-              
+              <tbody>
+              @foreach($tipos_movimientos as $tipos_movimiento)
+                    <tr>
+                    <td>
+                      {{ $tipos_movimiento->id }}
+                    </td>
+                    <td>
+                      {{ $tipos_movimiento->name }}
+                    </td>
+                    <td>
+                      {{ $tipos_movimiento->tipo }}
+                    </td>
+                    <td>
+                      {{ $tipos_movimiento->categoria }}
+                    </td>
+                    <td>
+                  <a href="#">
+                            <button onclick="openModalMovi({{ $tipos_movimiento->id }})" type="button" class="btn btn-danger waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Editar">
+                               <i class="fa  fa-eye"></i>
+                            </button>
+                        </a>
+                        <a href="/admin/tipos/movimientos/delete/{{ $tipos_movimiento->id }}" onclick='return confirm("¿Está seguro de eliminar el registro?\nSe eliminaran todos los datos asociados a el.\nCuentas de ahorro, creditos y demas...")'>
+                            <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar">
+                               <i class="fa fa-trash"></i>
+                            </button>
+                        </a>
+                    </td>
+                    </tr>
+
+              @endforeach  
 
               </tbody>
             </table>
@@ -71,6 +94,55 @@
 
 
             </div><!--Fin row-->
+
+
+            <div class="row">          
+                <div class="col-lg-12">
+                   <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                      </div>
+                      <div class="modal-body">
+                        {!! Form::open(['url' => 'admin/tipos/movimientos/update', 'method' => 'post']) !!}
+        {{ Form::hidden('id',null, ['class'=>'form-control','id'=>'id']) }}
+            <div class="row">
+              <div class="col-lg-4"> 
+                 {{ Form::text('name',null, ['placeholder' => 'Nombre del tipo de cuenta','class'=>'form-control','id'=>'names','required']) }}
+              </div>
+              <div class="col-lg-4"> 
+                 {{ Form::select('tipo', ['cuenta' => 'Depositos','retiro'=>'Retiros a Cuenta'], null, ['placeholder' => 'Tipo','class'=>'form-control','id'=>'tipo']) }}
+              </div>                    
+            <div class="col-lg-4">                  
+                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categoria']) }}
+            </div><!-- /.col-lg-6 -->  
+          </div>
+          <div class="row"><br>
+            <div class="col-lg-12">                  
+                         {!! Form::submit('Actualizar',['class'=>'btn btn-success']) !!}
+            </div><!-- /.col-lg-6 --> 
+          </div>
+
+                  
+{!! Form::close() !!}                        
+
+
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+                </div>
+             
+
+              </div>
             
 
 </div>
