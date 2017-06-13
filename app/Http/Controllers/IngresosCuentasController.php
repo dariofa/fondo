@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\MovimientoCuenta;
 use App\User;
 use App\Cuenta;
-
+use App\MovimientoTipo;
 class IngresosCuentasController extends Controller
 { 
    /**
@@ -39,8 +39,10 @@ class IngresosCuentasController extends Controller
     public function create($num_cuenta)
     {
 
+        $movimiento_tipo = MovimientoTipo::where('categoria','<>','credito')->get();
         $cuenta = Cuenta::where('num_cuenta', '=',$num_cuenta)->firstOrFail();
-         return view('admin.ingresos_cuentas.create',['cuenta'=>$cuenta]);
+        //dd($movimiento_tipo);
+         return view('admin.ingresos_cuentas.create',['cuenta'=>$cuenta,'movimiento_tipo'=>$movimiento_tipo]);
     }
 
     /**
@@ -61,7 +63,7 @@ class IngresosCuentasController extends Controller
         $movimiento_tipo = $request->input("ingreso_tipo");
        // dd($datos);
  $contador = 0;
-foreach ($datos as $key => $value) {  
+foreach ($datos as $llave => $value) {  
     if (is_array($value)) {  
         $bandera = false;    
         $Mcuenta = new MovimientoCuenta();    
@@ -69,17 +71,20 @@ foreach ($datos as $key => $value) {
          //dd($nombres);
         foreach ($nombres as $key => $value) {
                  
-                 if ($key == 0) {                    
+                 if ($key == 0) {    
+                    $movimiento_tipo_id  = $value;            
                     $Mcuenta->movimiento_tipo_id = $value;
                 }
-                 if ($key == 1) {                    
+                 if ($key == 1) {  
+                    $mes = $value;                  
                     $Mcuenta->mes = $value;
                  }
-                 if ($key == 2) {                    
+                 if ($key == 2) {   
+                    $valor = $value;                 
                     $Mcuenta->valor = $value;
                 }
-                 $Mcuenta->cuenta_id = $num_cuenta;
-                 $Mcuenta->save();  
+                $Mcuenta->cuenta_id = $num_cuenta;
+               $Mcuenta->save();  
 
             if ($movimiento_tipo==0 and $Mcuenta->valor != "" and $movimiento_tipo!="") {
                    $cuenta = Cuenta::find($num_cuenta);
@@ -88,7 +93,7 @@ foreach ($datos as $key => $value) {
                    $new_saldo = $saldo_actual + $Mcuenta->valor;
                    $cuenta->saldo_anterior = $saldo_actual;
                    $cuenta->saldo =  $new_saldo;                   
-                   $cuenta->save();
+                 $cuenta->save();
                   }
 
                if ($movimiento_tipo==2 and $Mcuenta->valor != "" and $movimiento_tipo!="") {
@@ -96,11 +101,41 @@ foreach ($datos as $key => $value) {
                    $saldo_anterior =  $cuenta->saldo_anterior;
                    $saldo_actual = $cuenta->saldo;
                    $new_saldo = $saldo_actual - $Mcuenta->valor;
-
                    $cuenta->saldo_anterior = $saldo_actual;
                    $cuenta->saldo =  $new_saldo;                   
                    $cuenta->save();
-                   //dd("SIii");
+
+
+
+                   $tipo_movi = MovimientoTipo::find($request->ingresos_tipo_id);                  
+                  if ($tipo_movi[$contador]->categoria != 'ahorro' ) {
+                   
+                    $cate = MovimientoTipo::find($movimiento_tipo_id);
+                    $cuenta = Cuenta::where('categoria','=',$cate->categoria)->first();
+                    $saldo_anterior =  $cuenta->saldo_anterior;
+                    $saldo_actual = $cuenta->saldo;
+                   
+                    $new_saldo = $saldo_actual + $Mcuenta->valor;
+                    $cuenta->saldo_anterior = $saldo_actual;
+                    $cuenta->saldo =  $new_saldo;  
+                    echo ($cuenta->id."<br>");
+                    echo ($saldo_anterior."<br>"); 
+                    echo ($saldo_actual."<br>"); 
+                    echo ($new_saldo."<br>");                 
+                    $cuenta->save();
+                    
+                    $Mcuenta = new MovimientoCuenta(); 
+                    $Mcuenta->movimiento_tipo_id = $movimiento_tipo_id;
+                    $Mcuenta->mes = $mes;
+                    $Mcuenta->valor = $valor;
+                    $Mcuenta->cuenta_id = $cuenta->id;
+                    $Mcuenta->save();  
+                    //dd($datos);
+
+
+                    }
+
+                   
                   }     
              
         }
@@ -166,6 +201,24 @@ foreach ($datos as $key => $value) {
     public function destroy($id)
     {
         //
+    }
+
+    public function storeDos(Request $request)
+    {
+       // dd($request->all());
+       
+            foreach ($request->movimiento_tipo_id as $ingresos => $ingreso) {
+                $movimiento_tipo = MovimientoTipo::find($ingreso);
+
+                if ($movimiento_tipo->categoria != 'ahorro') {
+                   echo "$ingreso";
+                }
+
+                
+
+            }
+
+       
     }
 
    

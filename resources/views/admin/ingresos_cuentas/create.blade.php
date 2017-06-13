@@ -40,10 +40,20 @@
   <label for="cuenta" id="ingresosLabel"> Ingresos</label> {!! Form::radio('movimiento','cuenta',false,['class'=>'radio','id'=>'cuenta','style'=>"display:none"]) !!}
 
        </li>
-       <li>
+       @if($cuenta->saldo > 0)
+
+<li>
  <label for="retiro" id="retirosLabel">Pagos - Retiros</label>{!! Form::radio('movimiento','retiro',false,['class'=>'radio','id'=>'retiro','style'=>"display:none"]) !!}
        </li>
+
+       @endif
+
+       <li>
+         Valor Total::<i id="vltotal">0</i>
+       </li>
+       
       </ul>
+
 </div>
 
 </div>
@@ -76,7 +86,7 @@
       <div class="form-group" id="cargo">
       <label for="">Valor</label>
       </div>
-  </div>
+  </div> 
  </div>
 
 {!! Form::open(['route'=>['cuentas.store'],'method'=>'POST','id'=>'formB']) !!}
@@ -86,17 +96,21 @@
 
 {!! Form::hidden('cuenta_id',$cuenta->id,['class'=>'form-control','placeholder'=>'Valor','required','id'=>'cuenta_id','hidden']) !!}
 
-{!! Form::text('ingreso_tipo',null,['class'=>'form-control','placeholder'=>'Valor','required','id'=>'ingreso_tipo','hidden']) !!}
+{!! Form::hidden('ingreso_tipo',null,['class'=>'form-control','placeholder'=>'Valor','required','id'=>'ingreso_tipo','hidden']) !!}
 
 
 
     
   <div id="resultado-tipo">
+ <div class='row'>
 
+   
+</div>
+     
       
   
   </div>  
-  <input type="submit" class="btn btn-success" disabled id="btnNewMov">
+  <input type="submit" class="btn btn-success"  id="btnNewMov">
 
 {!! Form::close() !!} 
 

@@ -24,7 +24,7 @@ class CreateCreditoTable extends Migration
             
             $table->string('forma_pago');
             
-            $table->integer('credito_tipo_id')->unsigned();
+          $table->integer('credito_tipo_id')->unsigned();
             $table->foreign('credito_tipo_id')->references('id')->on('creditos_tipo')->onDelete('cascade'); 
 
             $table->integer('user_id')->unsigned();

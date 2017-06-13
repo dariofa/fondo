@@ -7,6 +7,9 @@ use App\MovimientoCredito;
 use App\MovimientoCuenta;
 use App\Credito;
 use App\Cuenta;
+use App\FondoAsociado;
+use App\FondoRiesgo;
+
 class MovimientosCreditosController extends Controller
 {
     /**
@@ -88,8 +91,8 @@ return redirect('admin/creditos');
             $movimientos->movimiento_tipo; 
         });
 
-       $ahorro = $creditos->getAhorro($creditos);
-       // dd($movimientos);
+       $ahorro = $creditos->getAhorro($creditos->cuenta->ganancia);
+       //dd($creditos->cuenta->ganancia);
         
         return view('admin.movi_creditos.index',['creditos'=>$creditos,'movimientos'=>$movimientos,'ahorro'=>$ahorro]);
     }
@@ -119,8 +122,7 @@ return redirect('admin/creditos');
         foreach ($request->id as $key => $value) {
                $movimiento = MovimientoCredito::find($value);
                $movimiento->estado = 'pagada';
-               $movimiento->save();            
-              
+               $movimiento->save();       
            
         }
 
@@ -137,27 +139,73 @@ return redirect('admin/creditos');
             $credito->estado = 'pagado';
              $credito->saldo = 0;
         } 
-        $credito->save();
-        $ahorro = $credito->getAhorro($credito);
+       $credito->save();
+        
 
 
         if ($credito->saldo <= 0) {
            $cuenta = Cuenta::find($request->cuenta_id);
+           $ahorro = $credito->getAhorro($cuenta->ganancia);
+
            $saldo_anterior =  $cuenta->saldo_anterior;
            $saldo_actual = $cuenta->saldo;
            $new_saldo = $saldo_actual + $ahorro;
            $cuenta->saldo_anterior = $saldo_actual;
            $cuenta->saldo =  $new_saldo;                   
-           $cuenta->save();
+          $cuenta->save();
+
            $Mcuenta = new MovimientoCuenta();
            $Mcuenta->movimiento_tipo_id = $request->movimiento_tipo_id;
            $Mcuenta->cuenta_id = $request->cuenta_id;
            $Mcuenta->mes = date('Y-m-d');
            $Mcuenta->valor = $ahorro;
-           $Mcuenta->save();
-           //dd($saldo_actual);
+          $Mcuenta->save();
+           
+
+           $fondo_asociados = Cuenta::where('categoria','=','fondo_asociados')->first();
+           $ahorro = $credito->getAhorro($fondo_asociados->ganancia);
+           $saldo_anterior =  $fondo_asociados->saldo_anterior;
+           $saldo_actual = $fondo_asociados->saldo;
+           $new_saldo = $saldo_actual + $ahorro;
+           $fondo_asociados->saldo_anterior = $saldo_actual;
+           $fondo_asociados->saldo =  $new_saldo; 
+          $fondo_asociados->save();
+
+           $Mcuenta = new MovimientoCuenta();
+           $Mcuenta->movimiento_tipo_id = $request->movimiento_tipo_id;
+           $Mcuenta->cuenta_id = $fondo_asociados->id;
+           $Mcuenta->mes = date('Y-m-d');
+           $Mcuenta->valor = $ahorro;
+          $Mcuenta->save();
+
+          //dd($Mcuenta);
+
+           $fondo_riesgo = Cuenta::where('categoria','=','fondo_riesgo')->first();
+           $ahorro = $credito->getAhorro($fondo_riesgo->ganancia);
+           $saldo_anterior =  $fondo_riesgo->saldo_anterior;
+           $saldo_actual = $fondo_riesgo->saldo;
+           $new_saldo = $saldo_actual + $ahorro;
+           $fondo_riesgo->saldo_anterior = $saldo_actual;
+           $fondo_riesgo->saldo =  $new_saldo;
+           $fondo_riesgo->save();
+
+           $Mcuenta = new MovimientoCuenta();
+           $Mcuenta->movimiento_tipo_id = $request->movimiento_tipo_id;
+           $Mcuenta->cuenta_id = $fondo_riesgo->id;
+           $Mcuenta->mes = date('Y-m-d');
+           $Mcuenta->valor = $ahorro;
+            $Mcuenta->save();
+
+           //$fondo_asoc = new FondoAsociado();
+           //$intereses = ($credito->valor_credito * ($credito->credito_tipo->tasa_interes/100));
+           // $fondo_riesgo = $intereses * (37.5/100);
+           //$fondo_riesgo = $intereses - (2500);
+           //$fondo_asociados = $intereses - (1500);
+            
+
         }
-      
+
+            
       return redirect('admin/ingresos/creditos/view/'.$request->credito_id);  
     }
 

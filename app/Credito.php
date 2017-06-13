@@ -45,11 +45,18 @@ class Credito extends Model
 
     return $this->belongsToMany('App\ReferenciaTipo','credito_referencias')->withPivot('referencia_id','parentesco');
     }
+    public function fondos_asociado(){
+      return $this->hasMany('App\FondoAsociado');
+     }
+    public function fondos_riesgo(){
+      return $this->hasMany('App\FondoRiesgo');
+     } 
 
-    public function getAhorro($creditos){
-       $tasa = (20 - $creditos->credito_tipo->tasa_interes);
-       $valor_credito = $creditos->valor_credito;
-       $ahorro = $valor_credito * ($tasa/100);
+    public function getAhorro($ganancia){
+
+       //$ganancia = $this->cuenta->ganancia;       
+       $valor_credito = $this->valor_credito;
+       $ahorro = $valor_credito * ($ganancia/100);
        return $ahorro;
     }
     public function getValTotal($creditos){

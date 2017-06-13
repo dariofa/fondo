@@ -33,7 +33,8 @@ class CreateUsersTable extends Migration
             $table->string('est_laboral')->default("No aplica");;
             $table->string('pun_sisben')->default("No aplica");;
             $table->string('celular')->default("No aplica"); 
-            $table->enum('type_rol',['admin','cliente','root']);
+            $table->enum('tipo_rol',['admin','cliente','root'])->default('cliente');
+            $table->enum('bandera',['true','false'])->default('false');;
             $table->rememberToken();
             $table->timestamps();
         });

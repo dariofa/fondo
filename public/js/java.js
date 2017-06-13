@@ -53,7 +53,7 @@ valores ++;
                     
                     row += "<div class='col-md-4'> <input type='date' name='mes[]' disabled id='mes"+respu[i].id+"' class='form-control' required> </div>";
 
-                    row += "<div class='col-md-4'> <input type='text' name='valor[]' disabled id='valor"+respu[i].id+"' class='form-control' required > </div></div>";
+                    row += "<div class='col-md-4'> <input onblur='calTotal(this.value)' type='text' name='valor[]' disabled id='valor"+respu[i].id+"' class='form-control' required > </div></div>";
                                  
                     $("#resultado-tipo").append(row);
                       
@@ -240,6 +240,10 @@ function camChe(id){
               }else{
                 $('#mes'+id).attr('disabled','disabled');
                 $('#valor'+id).attr('disabled','disabled');
+                valor = $('#valor'+id).val();
+                //alert(valor);
+                $('#mes'+id).val('');
+                $('#valor'+id).val('');
                bandera = false;
               }  
                   // console.log('El checkbox ' + checkbox.attr('name') + ' está checkeado? ' + checkbox.is(':checked')  );
@@ -250,6 +254,8 @@ function camChe(id){
     $("#btnNewMov").attr('disabled','disabled');
   } 
 }
+
+
 function showF(id){
   $("#fila"+id).toggle();
   $("#filaRe"+id).toggle();
@@ -472,4 +478,28 @@ function buscarRefTipos(id){
                     
                 }
              });
+}
+
+function openModalNewFondo(){
+  $("#myModal").modal('show');
+}
+
+function calTotal(valor){
+
+  total = $("#vltotal");
+  saldo_anterior = $("#vltotal").text();
+  new_saldo = parseInt(saldo_anterior) + parseInt(valor);
+
+total.text(new_saldo);
+console.log(new_saldo);
+}
+
+function editCuenta(f){
+
+  fila = $("#fil"+f);
+  row = $("#row"+f);
+  fila.toggle();
+  row.toggle();
+
+
 }

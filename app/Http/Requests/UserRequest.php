@@ -25,7 +25,8 @@ class UserRequest extends FormRequest
     {
         return [
            'email'=>'unique:users',
-           'num_doc','unique:users'
+           'num_doc'=>'unique:users',
+           'username'=>'unique:users'
            ];
     }
 }

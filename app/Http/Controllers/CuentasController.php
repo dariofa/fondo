@@ -17,7 +17,7 @@ class CuentasController extends Controller
     public function index()
     { 
         
-        $cuentas = Cuenta::orderBy('id','ASC')->get();
+        $cuentas = Cuenta::orderBy('id','ASC')->where('categoria','=','ahorro')->get();
          $cuentas ->each(function($cuentas){
          $cuentas->user;               
     });
@@ -69,9 +69,10 @@ class CuentasController extends Controller
        $cuentas = Cuenta::where('user_id', $id)->get();
 
        $cuentas ->each(function($cuentas){
-            //$cuentas->categoria;
-            $cuentas->user;
+          $cuentas->user;
         });
+
+
        return view('admin.cuentas.show',['cuentas'=>$cuentas]);
 
        
@@ -85,7 +86,9 @@ class CuentasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $cuenta = Cuenta::find($id);
+       return view('admin.cuentas.edit',['cuenta'=>$cuenta]);
+
     }
 
     /**
@@ -97,7 +100,13 @@ class CuentasController extends Controller
      */
     public function update(Request $request, $id)
     {
-      return "Hola mundo";
+
+        $cuenta = Cuenta::find($id);
+        
+        $cuenta->fill($request->all());
+        $cuenta->save();
+      return redirect('admin/admin/');
+
     }
 
     /**
@@ -109,5 +118,42 @@ class CuentasController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function storeFondos(Request $request)
+    {
+
+     
+     //for ($i = count($request->num_cuenta) ; $i <=0; $i-- ) {
+        
+            foreach ($request->num_cuenta as $num_cuentas => $num_cuenta) {
+                $cuenta = new Cuenta();
+                $cuenta->num_cuenta = $num_cuenta;
+                echo "$num_cuenta<br>";
+
+                foreach ($request->ganancia as $ganancias => $ganancia) {
+                    if ($num_cuentas == $ganancias ) {
+                        $cuenta->ganancia = $ganancia;
+                      echo "$ganancia<br>";
+                    }          
+                }
+
+                foreach ($request->categoria as $categorias => $categoria) {
+                      if ($num_cuentas == $categorias ) {
+                        $cuenta->categoria = $categoria;
+                       echo "$categoria<br>";
+                    }
+                } 
+               $cuenta->user_id = $request->user_id;
+               $cuenta->save();
+
+            }
+//dd($request->all());
+        $user = User::find($request->user_id);
+        $user->bandera = true;
+        $user->save();
+
+     return redirect()->route('users.index');
+       
     }
 }

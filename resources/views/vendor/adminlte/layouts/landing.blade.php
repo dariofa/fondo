@@ -65,7 +65,16 @@ Landing page based on Pratt: http://blacktie.co/demo/pratt/
             </div><!--/.nav-collapse -->
         </div>
     </div>
-
+          
+          
+<!--Mensaje de alertas-->
+            @if (session()->has('flash_notification.message'))
+    <div class="alert alert-{{ session('flash_notification.level') }} alertas">
+        
+        {!! session('flash_notification.message') !!}
+    </div>
+            @endif
+<!--Fin Mensaje de alertas--> 
 
     <section id="home" name="home">
         <div id="headerwrap">

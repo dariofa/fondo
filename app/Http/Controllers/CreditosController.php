@@ -114,8 +114,10 @@ class CreditosController extends Controller
        }elseif($creditos->forma_pago=='diario'){
         $forma_pago = "+ 1 days";
        }
+
+     // dd($creditos->cuenta->ganancia);
        
-       $ahorro = $creditos->getAhorro($creditos);
+       $ahorro = $creditos->getAhorro($creditos->cuenta->ganancia);
        $listado = $movimiento->parrilla($num_cuotas,$valor,$forma_pago);
 
      return view('admin.creditos.show',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref,'listado'=>$listado,'ahorro'=>$ahorro]);

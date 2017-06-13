@@ -35,7 +35,7 @@
               <div class="col-md-4">
                          <div class="form-group">
           {!! Form::label('num_cuenta','Numero de la Cuenta') !!}
-          {!! Form::text('num_cuenta',$num_cuenta,['class'=>'form-control','required','readonly','id'=>'num_cuenta']) !!} 
+          {!! Form::text('num_cuenta',time(),['class'=>'form-control','required','readonly','id'=>'num_cuenta']) !!} 
                          </div>
                </div>
   
@@ -43,10 +43,10 @@
                 <div class="col-md-4">
                          <div class="form-group">
           {!! Form::label('categoria','Tipo de Cuenta') !!}
-          <select id="tipo_cuenta" class="form-control" placeholder="Tipo de Cuenta">
-            @foreach($tipo_cuenta as $cuenta)
-                 <option value="{{ $cuenta->id }}">{{ $cuenta->name }}</option> 
-             @endforeach
+          <select id="categoria" class="form-control" placeholder="Tipo de Cuenta">
+            
+                 <option value="ahorro">Ahorros</option> 
+            
           </select>
           
 

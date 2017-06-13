@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Validator;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRequest;
 use App\User;
@@ -30,8 +32,8 @@ class UsersController extends Controller
       }
     
     public function index(){   
-        $id = Auth::id();
-        $users = User::orderBy('id','ASC')->where('id','<>', $id)->paginate(4);
+        $id = Auth::user()->id;
+        $users = User::orderBy('id','ASC')->where('tipo_rol','=','cliente')->paginate(4);
         return view('admin.users.index',["users"=>$users]) ;
            }
 
@@ -159,5 +161,35 @@ class UsersController extends Controller
        $user -> delete();
        Flash::success('El usuario: '.$user->name.' ha sido eliminado con exito');
         return redirect()->route('users.index');
+    }
+
+
+    public function root(){
+      $user = User::where('tipo_rol','=','root')->get();
+
+      $num = count($user);
+      if ($num>0) {
+        return abort(503);
+      }
+
+      return view('auth/root');
+//dd($num);
+      
+
+      //dd($num);
+ 
+    }
+
+    public function rootCreate(UserRequest $request){
+      $user = new User($request->all());
+      $user->tipo_rol = 'root';
+      $user->password = bcrypt($request->password);
+      $user->name = ucwords($request->username);
+      $user->last_name = 'User'; 
+      $user->num_doc = time();
+      $user->save();
+      Flash::success('Ahora ya puedes iniciar sessión');
+      return redirect('/');
+
     }
 }

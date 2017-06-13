@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Credito;
-use App\Cuenta;
-use Illuminate\Support\Facades\Auth;
 
-class FondosController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +13,7 @@ class FondosController extends Controller
      */
     public function index()
     {
-        $id = Auth::id();
-        $cuentas = Cuenta::where('user_id','=',$id)->where('categoria','<>','ahorro')->get();
-         $cuentas ->each(function($cuentas){
-         $cuentas->user; 
-        });
-     
-                
-      
-       
-
-        return view('admin.fondos.index',['cuentas'=>$cuentas]);
+        return view('admin.admin.index');
     }
 
     /**
@@ -58,9 +45,7 @@ class FondosController extends Controller
      */
     public function show($id)
     {
-        $cuenta = Cuenta::find($id);
-        //dd($cuenta->ingresos_cuenta);
-        return view('admin.movi_fondos.show',['cuenta'=>$cuenta]);
+        //
     }
 
     /**

@@ -12,7 +12,7 @@
 
         <!-- Default box -->
         <div class="box">
-          <div class="box-header with-border">
+          <div class="box-header with-border"> 
             <h3 class="box-title"> Credito:: {{ $creditos->num_credito }}</h3>
             <h4>Titular:: {{ $creditos->user->name }} {{ $creditos->user->last_name }}
              Teléfono {{ $creditos->user->telefono }}

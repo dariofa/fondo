@@ -66,7 +66,7 @@
     </tr>
     <tr>
       <td>
-       Tipo de cuenta:: {{ $cuenta->cuenta_tipo->name}}
+       Tipo de cuenta:: {{ $cuenta->categoria}}
       </td>
       <tr>
         <td>

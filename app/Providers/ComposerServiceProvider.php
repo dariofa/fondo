@@ -17,11 +17,10 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer(['admin.cuentas.create','admin.ingresos_cuentas.create'],'App\Http\ViewComposers\CuentasComposer');
-
         View::composer(['admin.creditos.create'],'App\Http\ViewComposers\CreditosComposer');
-
         View::composer(['admin.movi_creditos.index'],'App\Http\ViewComposers\MovimientosCreditoComposer');
         View::composer(['admin.creditos.show'],'App\Http\ViewComposers\MovimientosCreditoComposer');
+        View::composer(['admin.admin.index'],'App\Http\ViewComposers\AdminComposer');
     
     }
 

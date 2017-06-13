@@ -378,7 +378,7 @@
                 <td>
                   <div class="form-group">
       {!! Form::label('num_doc','No Documento') !!}
-      {!! Form::text('num_doc',$user->num_doc,['class'=>'form-control tipo','placeholder'=>'Lugar de nacimiento','required']) !!}           
+  {!! Form::text('num_doc',$user->num_doc,['class'=>'form-control tipo','placeholder'=>'Lugar de nacimiento','required']) !!}           
                  </div>                  
                 </td>
               </tr>
@@ -406,7 +406,7 @@
                 </td>
                 <td>
     {!! Form::label('direccion','Dirección Residencia:') !!}
-    {!! Form::text('direccion',$user->dir_res,['class'=>'form-control tipo','required']) !!}
+    {!! Form::text('dir_res',$user->dir_res,['class'=>'form-control tipo','required']) !!}
               
                 </td>
               </tr>

@@ -15,7 +15,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin','middleware' => ['auth','root']], function () {
+
+Route::post('/cuentas/store/root','CuentasController@storeFondos'); 
+
+});
+
+
+Route::group(['prefix' => 'admin','middleware' => ['auth','fondo']], function () {
+	
+	//Route::get('/home/auth','HomeController@index');
+	//Admin
+	Route::resource('admin','AdminController');
 	//Usuarios
 	Route::resource('users','UsersController');
 	 
@@ -128,6 +139,10 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 	Route::get('/cuentas/create/{id}','CuentasController@create');
 	Route::post('/cuentas/store/ajax','CuentasController@storeAjax'); 
 	Route::get('/cuentas/{id}','CuentasController@show');
+	Route::get('/cuentas/edit/{id}','CuentasController@edit');
+	Route::post('/cuentas/update/{id}','CuentasController@update');
+	
+
 
 	//admin tipos de ingresos Movimientos Cuenta
 	Route::resource('tipos/ingresos','IngresosTipoController');
@@ -170,7 +185,15 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 		'as'=>'admin.ingresos.add',
 		'uses'=>'IngresosCuentasController@create'
 		]);
+	Route::post('/ingresos/store/',[
+		'as'=>'cuentas.store',
+		'uses'=>'IngresosCuentasController@store'
+		]);
 	Route::get('/cuentas/movimientos/view/{id}','IngresosCuentasController@show');
+
+	//Movimientos Fondos
+
+
 
 	//Movimientos Creditos o Ingresos
 	Route::resource('ingresos/creditos','MovimientosCreditosController');
@@ -206,12 +229,16 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 	
 	//Fondos
 	Route::resource('/fondos','FondosController');
+	Route::get('/fondos/movimientos/view/{id}','FondosController@show');
+
 
 	//Proyeccion
 	Route::resource('/proyeccion','ProyeccionController');
 
 
 
+//Route::get('create/root/user/','UsersController@root');
+//Route::post('create/root/','UsersController@rootCreate');
 
 		 	
 
@@ -224,6 +251,13 @@ Route::get('auth/register',function(){
 Route::get('auth/login',function(){
 	 return view('auth.login');
 });
+
+Route::get('create/root/user/','UsersController@root');
+Route::post('create/root/','UsersController@rootCreate');
+
+
+
+
 ///////////////////////////////////
 Route::group(['middleware' => 'auth'], function () {
     //    Route::get('/link1', function ()    {

@@ -45,7 +45,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
+    public function getRol(){
+        return $this->tipo_rol;
+    }
     public function cuentas(){
         return $this->hasMany('App\Cuenta');
     }

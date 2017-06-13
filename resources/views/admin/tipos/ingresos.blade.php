@@ -35,7 +35,7 @@
                     </div><!-- /.col-lg-6 -->  
                      <div class="col-lg-4">                  
                         <div class="input-group">
-                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categorias']) }}
+                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito','fondo_solidaridad'=>'Fondo Solidaridad','fondo_empresa'=>'Fondo Empresa'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categorias']) }}
                         
                           <span class="input-group-btn">
                             <button id="" class="btn btn-success" type="submit"><i class="fa fa-cog"></i></button>
@@ -118,7 +118,7 @@
                  {{ Form::select('tipo', ['cuenta' => 'Depositos','retiro'=>'Retiros a Cuenta'], null, ['placeholder' => 'Tipo','class'=>'form-control','id'=>'tipo']) }}
               </div>                    
             <div class="col-lg-4">                  
-                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categoria']) }}
+                          {{ Form::select('categoria', ['ahorro' => 'C. Ahorro','credito'=>'Credito','fondo_solidaridad'=>'Fondo Solidaridad','fondo_empresa'=>'Fondo Empresa'], null, ['placeholder' => 'Categoria','class'=>'form-control','id'=>'categoria']) }}
             </div><!-- /.col-lg-6 -->  
           </div>
           <div class="row"><br>
