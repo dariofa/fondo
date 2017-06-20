@@ -175,7 +175,7 @@
     </div>
     <div class="col-md-2">
       <div class="form-group">
-        Monto a Pagar
+        Saldo
       </div>
     </div>
     <div class="col-md-2">
@@ -240,7 +240,8 @@
       <span class="label label-primary">{{ $credito->estado  }}</span> 
       @elseif($credito->estado == 'operando')
       <span class="label label-primary">{{ $credito->estado  }}</span> 
-
+      @elseif($credito->estado == 'pagado')
+      <span class="label label-success">{{ $credito->estado  }}</span>
       @endif
     
       </div>
@@ -255,7 +256,9 @@
       <div class="form-group">
       @if($credito->estado == 'inactivo')
   <a href="/admin/referencias/create/{{ $credito->id }}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Asig. Referencias"><i class="fa fa-users"></i>
-   </a>
+   </a>   
+   <a href="#" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"><i class="fa fa-trash"></i>
+   </a>   
       @elseif($credito->estado == 'activo')
   <a href="/admin/creditos/{{ $credito->id }}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Revisar"><i class="fa fa-eye"></i>
    </a>
@@ -265,19 +268,15 @@
    @elseif($credito->estado == 'rechazado')
    <a href="/admin/creditos/{{ $credito->id }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Informar"><i class="fa fa-phone"></i>
    </a>
-   @elseif($credito->estado == 'operando')
+   @elseif($credito->estado == 'operando' or $credito->estado == 'pagado' )
+   <a href="/admin/ingresos/creditos/view/{{ $credito->id }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-original-title="Administrar"><i class="fa fa-cogs"></i>
+   </a>
+   @elseif($credito->estado == 'cancelado' )
    <a href="/admin/ingresos/creditos/view/{{ $credito->id }}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-original-title="Administrar"><i class="fa fa-cogs"></i>
    </a>
 
       @endif
-    
-
-   
-
-   <a href="#" class="btn btn-success" data-toggle="tooltip" data-placement="top" data-original-title="Realizar Movimientos"><i class="fa   fa-database"></i>
-   </a>
-
-    <a href="{{ url('admin/ingresos/add',$credito->id) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Editar"><i class="fa  fa-edit"></i>
+      <a href="{{ url('admin/ingresos/add',$credito->id) }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Administrar"><i class="fa  fa-edit"></i>
    </a>
       </div>
     </div>

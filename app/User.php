@@ -29,6 +29,9 @@ class User extends Authenticatable
         'fecha_nac',
         'lug_nac',
         'est_civil',
+        'num_hijos',
+        'pun_sisben',
+        'est_laboral',
         'eps',
         'celular',
         'id'       

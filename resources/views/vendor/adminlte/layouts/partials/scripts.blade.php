@@ -109,6 +109,7 @@
       function consultarInfLab(){
         id = $('#user_id').val();
         urli = "/admin/users/buscar/inflabo";
+        var mensaje = '"¿Está seguro de eliminar el registro?"';
         //alert(id)
         if (!buscar) {
           $.ajax({
@@ -127,7 +128,8 @@ row += "<input type='hidden' name='id' value='"+res[i].id+"'>";
 row += "<div class='col-md-2'> <input name='direccion' type='text' value='"+res[i].direccion+"' class='form-control'></div>";
 row += "<div class='col-md-2'> <input name='cargo' type='text' value='"+res[i].cargo+"' class='form-control'></div>";
 row += "<div class='col-md-2'> <input name='telefono' type='text' value='"+res[i].telefono+"' class='form-control'></div>";
-row += "<div class='col-md-2'> <input name='sector' type='text' value='"+res[i].sector+"' class='form-control'></div>";
+row += "<div class='col-md-1'> <input name='sector' type='text' value='"+res[i].sector+"' class='form-control'></div>";
+row += "<div class='col-md-1'> <input name='salario' type='text' value='"+res[i].salario+"' class='form-control'></div>";
 row += "<div class='col-md-2'> <input name='observaciones' type='text' value='"+res[i].observaciones+"' class='form-control'></div>";
 row += "<div class='col-md-2'><button class='btn btn-warning' type='submit'><i class='fa fa-edit'></i></button>"; 
 row +="</form>";
@@ -138,10 +140,11 @@ row += "<div class='row' id='filaRe"+res[i].id+"'>";
 row += "<div class='col-md-2'><label>"+res[i].direccion+"</label></div>";
 row += "<div class='col-md-2'><label>"+res[i].cargo+"</label></div>";
 row += "<div class='col-md-2'><label>"+res[i].telefono+"</label></div>";
-row += "<div class='col-md-2'><label>"+res[i].sector+"</label></div>";
+row += "<div class='col-md-1'><label>"+res[i].sector+"</label></div>";
+row += "<div class='col-md-1'><label>"+res[i].salario+"</label></div>";
 row += "<div class='col-md-2'><label>"+res[i].observaciones+"</label></div>";
 row += "<div class='col-md-2'><button class='btn btn-success' onclick='showF("+res[i].id+")' ><i class='fa fa-cog'></i></button>";
-row += "<a href='/admin/users/delete/infLa/"+res[i].id+"' class='btn btn-warning' ><i class='fa fa-trash'></i></a></div>";             
+row += "<a onclick='return confirm("+mensaje+")' href='/admin/users/delete/infLa/"+res[i].id+"' class='btn btn-warning' ><i class='fa fa-trash'></i></a></div>";             
 row +="</div>";
 
 $("#resultadoDa").append(row);  
@@ -175,7 +178,7 @@ $("#resultadoDa").append(row);
       function consultarInfProf(){
         id = $('#user_id').val();
         urli = "/admin/users/buscar/infprof";
-        //alert(id)
+       var mensaje = '"¿Está seguro de eliminar el registro?"';
         if (!buscar2) {
           $.ajax({
                 url: urli,
@@ -206,7 +209,7 @@ row += "<div class='col-md-2'><label>"+res[i].titulo+"</label></div>";
 row += "<div class='col-md-3'><label>"+res[i].fecha+"</label></div>";
 row += "<div class='col-md-2'><label>"+res[i].observaciones+"</label></div>";
 row += "<div class='col-md-2'><button class='btn btn-success' onclick='showF("+res[i].id+")' ><i class='fa fa-cog'></i></button>";
-row += "<a href='/admin/users/delete/infprof/"+res[i].id+"' class='btn btn-warning' ><i class='fa fa-trash'></i></a></div>";             
+row += "<a onclick='return confirm("+mensaje+")' href='/admin/users/delete/infprof/"+res[i].id+"' class='btn btn-warning' ><i class='fa fa-trash'></i></a></div>";             
 row +="</div>";
 
 $("#resultadoInf").append(row);  
@@ -238,7 +241,7 @@ $("#resultadoInf").append(row);
       function consultarBienes(){
         id = $('#user_id').val();
         urli = "/admin/users/search/bienes/";
-        //alert(id)
+        var mensaje = '"¿Está seguro de eliminar el registro?"';
         if (!buscar3) {
           $.ajax({
                 url: urli,
@@ -273,7 +276,7 @@ row += "<div class='col-md-5'><label>"+res[i].name+"</label></div>";
 row += "<div class='col-md-4'><label>"+res[i].tipo+"</label></div>";
 
 row += "<div class='col-md-3'><button class='btn btn-success' onclick='showF("+res[i].id+")' ><i class='fa fa-cog'></i></button>";
-row += "<a href='/admin/users/delete/bien/"+res[i].id+"' class='btn btn-warning' ><i class='fa fa-trash'></i></a></div>";             
+row += "<a onclick='return confirm("+mensaje+")' href='/admin/users/delete/bien/"+res[i].id+"' class='btn btn-warning' ><i class='fa fa-trash'></i></a></div>";             
 row +="</div>";
 
 $("#resultadoBienes").append(row);  
@@ -397,7 +400,6 @@ $("#resultadoBienes").append(row);
             "url":"https://cdn.datatables.net/plug-ins/1.10.13/i18n/Spanish.json",
         },
         "ajax": "/admin/listar/users",
-
         "columns":[
           {data:"id"},
           {data:"name"},

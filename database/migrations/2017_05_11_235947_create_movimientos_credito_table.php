@@ -17,7 +17,7 @@ class CreateMovimientosCreditoTable extends Migration
             $table->increments('id');
             $table->string('valor');
             $table->string('fecha');
-            $table->enum('type_rol',['pendiente','vencida','pagada'])->default('pendiente');
+            $table->enum('estado',['pendiente','vencida','pagada'])->default('pendiente');
             
             
 

@@ -31,13 +31,32 @@ class Credito extends Model
         return $this->belongsTo('App\Cuenta','cuenta_id');
      }
 
-      public function referencias(){
-        return $this->belongsToMany('App\Referencia','credito_referencias','credito_id');
-    }
-
+    
     public function movimientos(){
         return $this->hasMany('App\MovimientoCredito');
     }
 
+    public function referencias(){
+
+    return $this->belongsToMany('App\Referencia','credito_referencias')->withPivot('referencia_tipo_id','parentesco');
+    }
+
+    public function referencias_tipo(){
+
+    return $this->belongsToMany('App\ReferenciaTipo','credito_referencias')->withPivot('referencia_id','parentesco');
+    }
+
+    public function getAhorro($creditos){
+       $tasa = (20 - $creditos->credito_tipo->tasa_interes);
+       $valor_credito = $creditos->valor_credito;
+       $ahorro = $valor_credito * ($tasa/100);
+       return $ahorro;
+    }
+    public function getValTotal($creditos){
+       //$tasa = (20 - $creditos->credito_tipo->tasa_interes);
+       $valor_credito = $creditos->valor_credito;
+       $total = $valor_credito + ($valor_credito *(20/100));
+       return $total;
+    }
 
 }

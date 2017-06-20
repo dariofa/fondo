@@ -122,10 +122,10 @@ foreach ($datos as $key => $value) {
      */
     public function show($id)
     {
-        $Mcuenta =  MovimientoCuenta::where('cuenta_id', '=',$id)->get();
+        $Mcuenta =  Cuenta::find($id);
         $Mcuenta ->each(function($Mcuenta){
-            $Mcuenta->cuenta;
-            $Mcuenta->ingresos_tipo;
+            $Mcuenta->user;
+            $Mcuenta->ingresos_cuenta;
                          //   
     });
         //dd($Mcuenta);

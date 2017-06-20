@@ -115,8 +115,8 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->fill($request->all());
         $user->save();
-
-        Flash::success('La Información personal del usuario: '.$user->name.' ha sido actualizada con exito');
+//dd($request->all());
+       Flash::success('La Información personal del usuario: '.$user->name.' ha sido actualizada con exito');
         return redirect()->route('users.show',['user'=>$user]);
     }
 

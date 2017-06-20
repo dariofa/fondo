@@ -40,6 +40,8 @@ $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
 );
+class_alias('Barryvdh\Snappy\Facades\SnappyPdf', 'PDF');
+$app->singleton(Barryvdh\Snappy\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

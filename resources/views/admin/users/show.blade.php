@@ -26,7 +26,9 @@
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li><a href="{{ url('admin/cuentas/create',$user->id) }}">Nueva Cuenta</a></li>
-                        <li><a href="#">Ver Cuentas</a></li>
+                        <li><a href="{{ url('admin/creditos/create',$user->id) }}">Nuevo Credito</a></li>
+                        <li><a href="{{ url('admin/cuentas',$user->id) }}">Ver Cuentas</a></li>
+                        <li><a href="{{ url('admin/creditos/ver',$user->id) }}">Ver Creditos</a></li>
                         
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Separated link</a></li>
@@ -81,6 +83,12 @@
       {!! Form::text('lug_nac',$user->lug_nac,['class'=>'form-control tipo','placeholder'=>'Lugar de nacimiento','required']) !!}           
                  </div>                  
                 </td>
+                 <td>
+                  <div class="form-group">
+      {!! Form::label('pun_sisben','Puntaje Sisben') !!}
+      {!! Form::text('pun_sisben',$user->pun_sisben,['class'=>'form-control tipo','placeholder'=>'Puntaje Sisben','required']) !!}           
+                 </div>                  
+                </td>
               </tr>
               <tr>
                 <td>
@@ -90,6 +98,13 @@
                   </div>
                 </td>
                 <td>
+                  <div class="form-group">
+    {!! Form::label('num_hijos','Hijos') !!}
+    {!! Form::text('num_hijos',$user->num_hijos,['class'=>'form-control','placeholder'=>'Seleccione...','required']) !!}
+    
+                  </div>                 
+                </td>
+                 <td>
                   <div class="form-group">
     {!! Form::label('eps','EPS') !!}
     {!! Form::select('eps',['emsanar'=>'Emssanar','colsanitas'=>'Colsanitas'],$user->eps,['class'=>'form-control','placeholder'=>'Seleccione...','required']) !!}
@@ -107,6 +122,11 @@
                 <td>
     {!! Form::label('telefono','Teléfono:') !!}
     {!! Form::text('telefono',$user->telefono,['class'=>'form-control tipo','required']) !!}
+              
+                </td>
+                 <td>
+    {!! Form::label('est_laboral','Estado Laboral:') !!}
+   {!! Form::select('est_laboral',['activo'=>'Activo','inactivo'=>'Inactivo'],$user->est_laboral,['class'=>'form-control','placeholder'=>'Seleccione...','required']) !!}
               
                 </td>
               </tr>
@@ -148,9 +168,14 @@
                          </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                          <div class="form-group" id="cargo">
                           <label for=""><h5>Sector o Barrio</h5></label>
+                         </div>
+                    </div>
+                    <div class="col-md-1">
+                         <div class="form-group" id="cargo">
+                          <label for=""><h5>Salario</h5></label>
                          </div>
                     </div>
 
@@ -167,7 +192,7 @@
                     </div>
                   </div>
                    
-                    <div id="resultadoDa" class="container resulRef sombra">
+                    <div id="resultadoDa" class=" resulRef sombra">
                       
                     </div>
                   
@@ -200,17 +225,23 @@
                   </div>
 
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                          <div class="form-group">
     {!! Form::label('sector','Sector o Barrio') !!}
     {!! Form::text('sector',$user->sector,['class'=>'form-control tipo','required','id'=>'sector']) !!}
                          </div>
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                          <div class="form-group">
     {!! Form::label('telefono','Teléfono:') !!}
     {!! Form::text('telefono',null,['class'=>'form-control tipo','required','id'=>'telefono']) !!}
+                         </div>
+                    </div>
+                    <div class="col-md-3">
+                         <div class="form-group">
+    {!! Form::label('salario','Salario:') !!}
+    {!! Form::text('salario',null,['class'=>'form-control tipo','required','id'=>'telefono']) !!}
                          </div>
                     </div>
                   </div>

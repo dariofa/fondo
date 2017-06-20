@@ -13,7 +13,7 @@ class Cuenta extends Model
     	'saldo',
         'user_id',
         'cuenta_tipo_id'    	
-    ];
+    ]; 
 
     public function user(){
      	return $this->belongsTo('App\User','user_id');

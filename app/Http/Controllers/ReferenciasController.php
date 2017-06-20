@@ -33,10 +33,13 @@ class ReferenciasController extends Controller
         $creditos ->each(function($creditos){
             $creditos->user;
             $creditos->credito_tipo; 
-            $creditos->referencias;                          
+            $creditos->referencias; 
+            //$creditos->referencia_tipo;                        
         });
+
+      //$referencia =  Referencia::find(10);
         //$num = count($creditos->referencias);
-        //dd($num);
+        //dd($creditos->referencias_tipo);
         return view('admin.ref_creditos.index',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref]);
     }
 
@@ -48,16 +51,45 @@ class ReferenciasController extends Controller
      */
     public function store(Request $request)
     {
-        $tipo_ref = ReferenciaTipo::orderBy("id","ASC")->pluck('name','id');
-        //dd($request->all());
-        $creditos = Credito::find($request->num_credito);
+         //dd($request->all());
+        $bandera = false;
+        if (!$request->has("referencia_id")){            
+        $tipo_ref = ReferenciaTipo::orderBy("id","ASC")->pluck('name','id');       
+        $creditos = Credito::find($request->credito_id);
         $referencia = new Referencia($request->all());
-        $referencia->save();
-        $creditos->referencias()->attach($referencia->id);
+        $referencia->save();        
+        $creditos->referencias()->attach($referencia->id,[
+            'referencia_tipo_id'=>$request->referencias_tipo_id,
+            'parentesco'=>$request->parentesco
+            ]);
 
+         }else{
+            $referencia = Referencia::find($request->referencia_id);
+            $creditos = Credito::find($request->credito_id);            
+            if (count($creditos->referencias) > 0) {
 
-        flash::success('La referencia para el  '.$creditos->num_credito.' ha sido registrado con exito');
-        return redirect()->route('admin.referencias.create',['creditos'=>$creditos]);
+                for ($i=0; $i < count($creditos->referencias) ; $i++) { 
+               
+                    if ($creditos->referencias[$i]->id == $request->referencia_id) {
+                     $bandera = true;
+                    }
+                }
+            }
+           
+  if ($bandera) {
+    flash::success('La referencia para el  '.$creditos->num_credito.' ya existe');
+      return redirect()->route('admin.referencias.create',['creditos'=>$creditos]);
+}else{
+    $creditos->referencias()->attach($referencia->id,['referencia_tipo_id'=>$request->referencias_tipo_id,'parentesco'=>$request->parentesco]);    
+    }
+ 
+        }
+
+        
+
+    flash::success('La referencia para el  '.$creditos->num_credito.' ha sido registrado con exito');
+    return redirect()->route('admin.referencias.create',['creditos'=>$creditos]);
+        
         
     }
 
@@ -104,5 +136,24 @@ class ReferenciasController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+     public function searchAjax(Request $request)
+    {
+        //dd( $request->num_doc);
+        $referencia = Referencia::where('num_doc','=',$request->num_doc)->orWhere('id','=',$request->id)->get();
+
+        //dd($referencia);
+        return response()->json($referencia); 
+
+
+
+    }
+     public function delete($idRef,$idCred)
+    {
+        $creditos = Credito::find($idCred);
+        $creditos->referencias()->detach($idRef);
+       flash::success('La referencia para el  '.$creditos->num_credito.' ha sido registrado con exito');
+       return redirect()->route('admin.referencias.create',['creditos'=>$creditos]);
     }
 }

@@ -186,6 +186,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         //Cviebrock\EloquentSluggable\ServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+       //Barryvdh\DomPDF\ServiceProvider::class,
+      Barryvdh\Snappy\ServiceProvider::class,
 
     ],
 
@@ -239,6 +241,12 @@ return [
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        
+         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+      //  'PDF' => Barryvdh\DomPDF\Facade::class,
+
+
 
     ],
 

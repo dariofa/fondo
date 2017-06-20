@@ -20,8 +20,13 @@
               <h4>Estado del Credito:: {{ $creditos->estado }}</h4>  
           
             @if($creditos->estado == 'inactivo')
-                <a href="/admin/creditos/change/status/{{ $creditos->id }}/activo" class="btn btn-success">Activar</a>
-                @else
+                @if(count($creditos->user->bienes) > 0 and count($creditos->referencias) > 0)
+                     <a href="/admin/creditos/change/status/{{ $creditos->id }}/activo" class="btn btn-success">Activar</a>
+                     @else
+                    <a href="#" class="btn btn-danger">Debe tener al menos una referencia y un bien, para poder registrar el credito</a>           
+
+                @endif
+            @else
                   <a href="/admin/creditos/change/status/{{ $creditos->id }}/inactivo" class="btn btn-success">Inactivar</a>          
             @endif
             
@@ -40,9 +45,9 @@
                         <li class="active">
                           <a  href="#1a" data-toggle="tab" id="buscarBienes">Bienes</a>
                         </li>
-                        <li><a href="#2a" id="buscarInfLabo" data-toggle="tab">Referencias</a>
+                        <li><a href="#2a"  data-toggle="tab">Referencias</a>
                         </li>
-                        <li><a href="#3a" id="buscarInfProf" data-toggle="tab">XXXXXX</a>
+                        <li><a href="#3a"  data-toggle="tab">XXXXXX</a>
                         </li>
                         <li><a href="#4a" id="buscarInfPerf" data-toggle="tab">XXXXXX</a>
                         </li>
@@ -73,7 +78,11 @@
   
   </div>
       @endforeach
-
+  <div class="row">
+    <div class="col-md-12">
+      <label for="" class="label label-info">Para agregar un bien diríjase al módulo de <a href="/admin/users/{{ $creditos->user->id }}">usuarios</a> </label>
+    </div>
+  </div>
 
     </div><!--fin container -->
                           </div>
@@ -104,8 +113,10 @@
   </div>
   </div>
 
+  
+<?php $num=1; ?>
  @foreach($creditos->referencias as $referencia)
-  <div class="row">
+  <div class="row" id="{{ $num }}">
      <div class="col-md-3">
       <b> {{ $referencia->name }} </b>
       <b> {{ $referencia->last_name }} </b>
@@ -117,34 +128,35 @@
       <b> {{ $referencia->telefono }} </b>
      </div>
      <div class="col-md-1">
-      <b> {{ $referencia->parentesco }} </b>
+      <b> {{ $referencia->pivot->parentesco }} </b>
      </div>
      <div class="col-md-1">
       <b> {{ $referencia->est_laboral }} </b>
      </div>
      <div class="col-md-2">
-      <b> {{ ($referencia->referencia_tipo->name) }} </b>
+      <b>{{ ($creditos->referencias_tipo[0]->name) }}</b>
      </div>
       <div class="col-md-2">
       <div class="form-group">
-
-   <a href="#" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Editar"><i class="fa  fa-edit"></i>
-   </a>
-
-   <a href="#" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"><i class="fa  fa-trash"></i>
+    
+    <button class="btn btt-info" onclick="searchRef({{ $referencia->id }})" data-toggle="tooltip" data-placement="top" data-original-title="Editar"><i class="fa  fa-edit"></i></button>
+   <a onclick="return confirm('¿Está seguro de eliminar el registro?')" href="/admin/referencias/delete/{{ $referencia->pivot->referencia_id }}/{{ $creditos->id }}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar"><i class="fa  fa-trash"></i>
    </a>
       </div>
-     </div>
-     
+     </div>     
   </div>
+<!--Form Editar-->
+
  @endforeach 
 </div>
 
 <hr>
 
 <div class="container sombra">
-{!! Form::open(['route'=>['referencias.store','num_credito'=>$creditos->id],'method'=>'post']) !!}
+{!! Form::open(['route'=>['referencias.store','credito_id'=>$creditos->id],'method'=>'post']) !!}
   <div class="row">
+  {!! Form::hidden('referencia_id',null,['class'=>'form-control tipo','placeholder'=>'No Documento','required','id'=>'referencia_id']) !!} 
+  
     <div class="col-md-6">
       <div class="form-group">     
     {!! Form::label('referencias_tipo_id','Tipo de referencia') !!}
@@ -154,7 +166,7 @@
     <div class="col-md-6">
       <div class="form-group">
     {!! Form::label('type_doc','Tipo Doc') !!}
-    {!! Form::select('type_doc',["cc"=>"Cedula Ciudadania","ce"=>"Cedula Extranjeria"],null,['class'=>'form-control tipo','required']) !!}
+    {!! Form::select('type_doc',["cc"=>"Cedula Ciudadania","ce"=>"Cedula Extranjeria"],null,['class'=>'form-control tipo','required','id'=>'type_doc']) !!}
       </div>
     </div>
 
@@ -163,14 +175,14 @@
     <div class="col-md-6">
       <div class="form-group">
       {!! Form::label('num_doc','No Documento') !!}
-      {!! Form::text('num_doc',null,['class'=>'form-control tipo','placeholder'=>'No Documento','required']) !!}           
+      {!! Form::text('num_doc',null,['class'=>'form-control tipo','placeholder'=>'No Documento','required','id'=>'num_doc']) !!}           
       </div> 
     </div>
 
     <div class="col-md-6">
       <div class="form-group">
     {!! Form::label('lug_exp_doc','Lugar Exp. Documento') !!}
-    {!! Form::text('lug_exp_doc',null,['class'=>'form-control tipo','required','placeholder'=>'Lugar Exp. Documento']) !!}
+    {!! Form::text('lug_exp_doc',null,['class'=>'form-control tipo','required','placeholder'=>'Lugar Exp. Documento','id'=>'lug_exp_doc']) !!}
       </div>
     </div>
   </div>
@@ -178,13 +190,13 @@
     <div class="col-md-6">
       <div class="form-group">
     {!! Form::label('name','Nombres') !!}
-    {!! Form::text('name',null,['class'=>'form-control tipo','placeholder'=>'Nombres','required']) !!}
+    {!! Form::text('name',null,['class'=>'form-control tipo','placeholder'=>'Nombres','required','id'=>'name']) !!}
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
       {!! Form::label('last_name','Apellidos') !!}
-      {!! Form::text('last_name',null,['class'=>'form-control tipo','placeholder'=>'Apellidos','required']) !!}           
+      {!! Form::text('last_name',null,['class'=>'form-control tipo','placeholder'=>'Apellidos','required','id'=>'last_name']) !!}           
       </div> 
     </div>
   </div>
@@ -192,13 +204,13 @@
     <div class="col-md-6">
       <div class="form-group">
     {!! Form::label('direccion','Dirección') !!}
-    {!! Form::text('direccion',null,['class'=>'form-control tipo','placeholder'=>'Dirección','required']) !!}
+    {!! Form::text('direccion',null,['class'=>'form-control tipo','placeholder'=>'Dirección','required','id'=>'direccion']) !!}
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
       {!! Form::label('telefono','Teléfono') !!}
-      {!! Form::text('telefono',null,['class'=>'form-control tipo','placeholder'=>'Teléfono','required']) !!}           
+      {!! Form::text('telefono',null,['class'=>'form-control tipo','placeholder'=>'Teléfono','required','id'=>'telefono']) !!}           
       </div> 
     </div>
   </div>
@@ -206,7 +218,7 @@
   <div class="col-md-6">
       <div class="form-group">
       {!! Form::label('email','E-mail') !!}
-      {!! Form::email('email',null,['class'=>'form-control tipo','placeholder'=>'example@correo.com','required']) !!}           
+      {!! Form::email('email',null,['class'=>'form-control tipo','placeholder'=>'example@correo.com','required','id'=>'email']) !!}           
       </div> 
     </div>
     <div class="col-md-6">

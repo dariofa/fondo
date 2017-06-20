@@ -11,8 +11,8 @@ class Referencia extends Model
             'telefono',
            'lug_exp_doc',            
            'eps',
+           'type_doc',
            'pun_sisben',
-           'parentesco',
            'email',
            'tipo_vivienda',
            'deu_bancarias',
@@ -21,15 +21,20 @@ class Referencia extends Model
            'ing_mensuales',
            'ben_gobierno',
            'per_cargo',
-           'referencias_tipo_id'
+           'id'
+           
            ];
 
-     public function referencia_tipo(){
+    /* public function referencia_tipo(){
      	return $this->belongsTo('App\ReferenciaTipo','referencias_tipo_id');
-     }  
+     } */ 
 
-     public function creditos(){
-        return $this->belongsToMany('App\Credito','credito_referencias','referencia_id');
-    }    
+     public function credito(){
+        return $this->belongsToMany('App\Credito','credito_referencias')->withPivot('referencia_tipo_id','parentesco');
+    }  
+
+    public function referencias_tipo(){
+        return $this->belongsToMany('App\ReferenciaTipo','credito_referencias')->withPivot('credito_id','parentesco');
+    }   
 
 }

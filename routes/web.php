@@ -162,12 +162,15 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 	//Movimientos Creditos o Ingresos
 	Route::resource('ingresos/creditos','MovimientosCreditosController');
 	Route::get('/ingresos/creditos/view/{id}','MovimientosCreditosController@show');
+	Route::put('/ingresos/creditos/update/','MovimientosCreditosController@update');
+
 
 	
 	//creditos
 	Route::resource('creditos','CreditosController');
 	Route::get('/creditos/create/{id}','CreditosController@create');
-	Route::get('/creditos/change/status/{id}/{status}','CreditosController@changeStatus'); 
+	Route::get('/creditos/change/status/{id}/{status}','CreditosController@changeStatus');
+	Route::get('/creditos/ver/{id}','CreditosController@ver'); 
 	//Route::get('/creditos/{id}','CreditosController@show');
 
 	//referencias creditos
@@ -176,10 +179,14 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 		'as'=>'admin.referencias.create',
 		'uses'=> 'ReferenciasController@create'
 		]);
+	Route::post('/referencias/buscar','ReferenciasController@searchAjax');
+	Route::get('/referencias/delete/{idRef}/{idCre}','ReferenciasController@delete');
 
 	//Route::post('/referencias/store/ajax','ReferenciasController@storeAjax'); 
 	//Route::get('/referencias/{id}','ReferenciasController@show');
-	
+	//pdf
+	Route::get('/reportes/credito/{id}','PdfController@reporteCredito');
+	Route::get('/reportes/cuenta/movimientos/{id}','PdfController@reporteMoviCuenta');
 
 
 

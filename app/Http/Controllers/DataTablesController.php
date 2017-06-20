@@ -18,7 +18,7 @@ class DataTablesController extends Controller
     public function listarUsers()    {
        $id = Auth::id(); 
       $model = User::orderBy('id','ASC')->where('id','<>',$id)->get();
-      
+      $mensaje = '¿Esta seguro de eliminar el registro\n Se eliminaran todos los datos asociados\nCuentas; Creditos';
       //$model = User::orderBy('id','ASC')->where('id','<>', $id);
         
       //return view('admin.users.index','users'=>$users);
@@ -30,14 +30,9 @@ class DataTablesController extends Controller
                                <i class="fa  fa-eye"></i>
                             </button>
                         </a>
-                        <a href="/admin/users/delete/'.$model->id.'">
+                        <a href="/admin/users/delete/'.$model->id.'" onclick=\'return confirm("¿Está seguro de eliminar el registro?\nSe eliminaran todos los datos asociados a el.\nCuentas de ahorro, creditos y demas...")\'>
                             <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar">
                                <i class="fa fa-trash"></i>
-                            </button>
-                        </a>
-                        <a href="/admin/cuentas/'.$model->id.'">
-                            <button type="button" class="btn btn-info waves-effect waves-light" data-toggle="tooltip" data-placement="top" data-original-title="Ver Cuentas">
-                               <i class="fa  fa-credit-card"></i>
                             </button>
                         </a>';
     	return  ($boton);

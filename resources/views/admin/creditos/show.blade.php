@@ -17,7 +17,11 @@
             <h4>Titular:: {{ $creditos->user->name }} {{ $creditos->user->last_name }}
              Teléfono {{ $creditos->user->telefono }}
              </h4>
-              <h4>Estado del Credito:: {{ $creditos->estado }}</h4>  
+              <h4>Estado del Credito:: {{ $creditos->estado }}</h4>
+              <h4>Monto Total a Pagar:: {{ $creditos->saldo }}</h4>
+              <h4>Tipo de Credito:: {{ $creditos->credito_tipo->name }}</h4>  
+              <h4>Tasa de Interes:: {{ $creditos->credito_tipo->tasa_interes }}%</h4> 
+              <h4>Ahorro Generado:: {{ $ahorro }} a Cuenta:: {{ $creditos->cuenta->num_cuenta }}</h4>  
           
             @if($creditos->estado == 'activo')
                 <a href="/admin/creditos/change/status/{{ $creditos->id }}/aceptado" class="btn btn-success">Aceptar</a>
@@ -36,7 +40,7 @@
 
             <a href="/admin/creditos/change/status/{{ $creditos->id }}/inactivo" class="btn btn-warning">Inactivar</a>
 
-
+ 
             <div class="box-tools pull-right">
               <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                 <i class="fa fa-minus"></i></button>
@@ -127,13 +131,13 @@
       <b> {{ $referencia->telefono }} </b>
      </div>
      <div class="col-md-1">
-      <b> {{ $referencia->parentesco }} </b>
+      <b> {{ $referencia->pivot->parentesco }} </b>
      </div>
      <div class="col-md-1">
       <b> {{ $referencia->est_laboral }} </b>
      </div>
      <div class="col-md-2">
-      <b> {{ ($referencia->referencia_tipo->name) }} </b>
+      <b> {{ ($creditos->referencias_tipo[0]->name) }} </b>
      </div>
       
      
@@ -150,6 +154,7 @@
 <div class="tab-pane <?php if ($creditos->estado == 'aceptado') echo 'active'; ?> "  id="3a">
                 <?php $num = 0; ?>
       {!! Form::open(['url'=>['admin/ingresos/creditos'],'method'=>'POST','id'=>'form-new-credito']) !!}
+      {!! Form::hidden('cuenta_id',$creditos->cuenta->id,['class'=>'form-control','placeholder'=>'000.000','id'=>'cuenta_id'.$num,'required']) !!}
 <table class="table">
 <tr>
       <td colspan="4">

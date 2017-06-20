@@ -18,16 +18,16 @@ class CreateReferenciasTable extends Migration
             $table->string('name');
             $table->string('last_name');
             $table->string('num_doc',30)->unique();
+            $table->string('type_doc',30);
             $table->string('direccion',30);
             $table->string('telefono');
             $table->string('email');
             $table->string('lug_exp_doc');
-            $table->string('parentesco');
             $table->string('est_laboral');
             $table->date('fec_nacimiento');
             $table->string('ing_mensuales');
-            $table->integer('referencias_tipo_id')->unsigned();
-            $table->foreign('referencias_tipo_id')->references('id')->on('referencias_tipo')->onDelete('cascade'); 
+            
+            
             $table->timestamps();
         });
 

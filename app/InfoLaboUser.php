@@ -13,6 +13,7 @@ class InfoLaboUser extends Model
    	'cargo',
    	'telefono',
    	'sector',
+    'salario',
    	'observaciones',
    	'user_id'
    ];

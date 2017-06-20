@@ -28,7 +28,8 @@
 <div class="row">
 	<div class="col-md-5">
       <div class="form-group">
-  Seleccione el tipo de movimiento para la cuenta: <b>{{ $cuenta->num_cuenta }}</b>
+  Seleccione el tipo de movimiento para la cuenta: <b>{{ $cuenta->num_cuenta }}</b><br>
+  Saldo actual: $<b>{{ $cuenta->saldo }}</b> 
       </div>
     </div> 
 

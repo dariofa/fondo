@@ -35,9 +35,16 @@
       				
 				<div class="listado_cuentas">
 						    <diw class="row">
+						    @if(isset($Mcuenta))
+						    	<div class="col-md-12">
+						    		<h3>Listado de Movimientos para la cuenta::
+ 					    	</div>
+						    	@else
 						    	<div class="col-md-12">
 						    		<h3>Listado de Movimientos para todas las cuentas</h3>
 						    	</div>
+
+						    @endif	
 						    </diw>
 						    <div class="row">
 						      <div class="col-md-2">
@@ -129,14 +136,15 @@
 @if(isset($Mcuenta) )
 
         <div>
-     @foreach($Mcuenta as $movimiento)
+
+     @foreach($Mcuenta->ingresos_cuenta as $movimiento)
       <!--Esta debe ser la consulta-->
       
   <div class="row">
 
     <div class="col-md-2">
       <div class="form-group">
-      {{ $movimiento->cuenta_id  }}
+      {{ $movimiento->cuenta->num_cuenta  }}
          
       </div>
     </div>
@@ -144,13 +152,18 @@
 <div class="col-md-3">
 <div class="form-group">
      {{ ($movimiento->ingresos_tipo->name)  }}   
+     @if($movimiento->ingresos_tipo->categoria == 'credito')
+                    @foreach($Mcuenta->creditos as $credito)
+                        <label for="">--{{ $credito->num_credito}}</label>
+                    @endforeach                 
+              @endif
     
       </div>
 </div>
 
   <div class="col-md-2">
       <div class="form-group">
-      @if($movimiento->ingresos_tipo->tipo == 'retiro')
+      @if($movimiento->ingresos_tipo->tipo == 'retiro' and $movimiento->ingresos_tipo->categoria <> 'credito')
 		<label for="">-</label>	
       @endif
     {{ $movimiento->valor  }}
@@ -167,6 +180,9 @@
         @endforeach
  </div>   
  <!---->
+ <div>
+ 	<a href="/admin/reportes/cuenta/movimientos/{{ $Mcuenta->id }}"  target="_blank" class="btn btn-primary"><i class="fa fa-print"></i></a>
+ </div>
  @endif
 
 						 </div>      

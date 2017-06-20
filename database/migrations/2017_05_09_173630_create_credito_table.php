@@ -18,7 +18,7 @@ class CreateCreditoTable extends Migration
             $table->string('num_credito',20)->unique();
             $table->string('valor_credito');
             $table->string('nu_cuotas');
-            $table->enum('estado',['activo','operando','inactivo','cancelado','rechazado','aceptado'])->default('inactivo');
+            $table->enum('estado',['activo','operando','inactivo','cancelado','rechazado','aceptado','pagado'])->default('inactivo');
             $table->string('saldo');
             $table->date('fecha_act');
             
@@ -39,14 +39,19 @@ class CreateCreditoTable extends Migration
 
         Schema::create('credito_referencias', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('parentesco');
           
 
             $table->integer('credito_id')->unsigned();
             $table->integer('referencia_id')->unsigned();
+            $table->integer('referencia_tipo_id')->unsigned();
+            
             
             $table->foreign('credito_id')->references('id')->on('creditos')->onDelete('cascade');
 
             $table->foreign('referencia_id')->references('id')->on('referencias')->onDelete('cascade');
+
+            $table->foreign('referencia_tipo_id')->references('id')->on('referencias_tipo')->onDelete('cascade'); 
 
             $table->timestamps();
         });

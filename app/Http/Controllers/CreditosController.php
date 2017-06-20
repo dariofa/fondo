@@ -62,14 +62,20 @@ class CreditosController extends Controller
         flash::success('Credito '.$request->n.' registrado con exito');
        return  redirect('admin/creditos/');
     }
-     public function changeStatus($id,$status)
-    {
+     public function changeStatus($id,$status)    {
         $credito = Credito::find($id);
         $credito->estado = $status;
         if ($status == 'operando') {
             $credito->fecha_act = date('Y-m-d');
         }
         $credito->save();
+
+        if ($status=='inactivo') {
+           $movimientos = MovimientoCredito::where('credito_id','=',$id);
+           $movimientos->delete();
+           
+        }
+
         //dd($id);
 
         flash::success('El Credito ha sido '.$status.' con exito');
@@ -100,20 +106,23 @@ class CreditosController extends Controller
        //$fecha_act = $creditos->fecha_act;
        //dd($creditos->forma_pago);
        if ($creditos->forma_pago=='mensual') {
-           $forma_pago = "+ 30 days";
+           $forma_pago = "+ 31 days";
        }elseif($creditos->forma_pago=='quincenal'){
-        $forma_pago = "+ 15 days";
+        $forma_pago = "+ 16 days";
        }elseif($creditos->forma_pago=='semanal'){
-        $forma_pago = "+ 7 days";
+        $forma_pago = "+ 8 days"; 
        }elseif($creditos->forma_pago=='diario'){
         $forma_pago = "+ 1 days";
        }
+       
+       $ahorro = $creditos->getAhorro($creditos);
+       
 
-   
+  //dd($ganancia);
 
        $listado = $movimiento->parrilla($num_cuotas,$valor,$forma_pago);
 
-     return view('admin.creditos.show',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref,'listado'=>$listado]);
+     return view('admin.creditos.show',['creditos'=>$creditos,'tipo_ref'=>$tipo_ref,'listado'=>$listado,'ahorro'=>$ahorro]);
     }
 
     /**
@@ -148,5 +157,18 @@ class CreditosController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+     public function ver($id)
+    {
+        $creditos = Credito::where('user_id','=',$id)->get();
+        $creditos ->each(function($creditos){
+            $creditos->user;
+            $creditos->credito_tipo; 
+            $creditos->referencias;
+            $creditos->movimientos;
+            $creditos->cuenta;                          
+        });
+        return view('admin.creditos.ver',['creditos'=>$creditos]);
     }
 }

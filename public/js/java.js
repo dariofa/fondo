@@ -68,8 +68,8 @@ valores ++;
                 }
              });
     });
-
-   $(".check-add-payment").click(function(){
+total = 0;
+$(".check-add-payment").click(function(){
      checkbox = $(this);
      id = checkbox.attr('id');
       
@@ -78,24 +78,96 @@ valores ++;
         $("#valor"+id).removeAttr("disabled");
           $("#fecha"+id).removeAttr("disabled");
            $("#movimiento_tipo_id"+id).removeAttr("disabled");
-           $("#credito_id"+id).removeAttr("disabled");
-
+           $("#id"+id).removeAttr("disabled");
+           $("#btnPagCou").removeAttr("disabled");
+           $("#fila"+id).addClass("activa");
+           total += parseInt($("#valor"+id).val());
+         
       }
       if (!checkbox.is(':checked')) {
          $("#valor"+id).attr("disabled",'disabled');
           $("#fecha"+id).attr("disabled",'disabled');
            $("#movimiento_tipo_id"+id).attr("disabled",'disabled');
-           $("#credito_id"+id).attr("disabled",'disabled');
+           $("#id"+id).attr("disabled",'disabled');
+           $("#btnPagCou").attr("disabled",'disabled');
+           $("#fila"+id).removeClass("activa");
+           total -= parseInt($("#valor"+id).val());
+           
       }
-
+$("#totalPag").html(total);
 
    });
-
+//Asignar rol y password
    $("#formNewUer").submit(function(){
     $("#username").val($("#num_doc").val());
      $("#password").val($("#num_doc").val());
     return true;
-   })
+   });
+
+   $("#num_doc").blur(function(){
+valor = $(this).val();
+//console.log(valor);
+ urli =  "/admin/referencias/buscar";
+     $.ajax({
+                url: urli,
+                type: 'POST',
+                cache: false,
+                data: {'num_doc':valor},                
+                beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
+                },
+                success: function(respu) {                     
+                 res =  isEmptyJSON(respu);
+                console.log(respu);
+                 console.log(valor);
+                 if (!res) {
+                  $("#lug_exp_doc").val(respu[0].lug_exp_doc);
+                  $("#name").val(respu[0].name);
+                  $("#last_name").val(respu[0].last_name);
+                  $("#direccion").val(respu[0].direccion);
+                  $("#telefono").val(respu[0].telefono);
+                  $("#email").val(respu[0].email);
+                  $("#ing_mensuales").val(respu[0].ing_mensuales);
+                  $("#referencia_id").val(respu[0].id);
+
+                  $("#referencia_id").removeAttr("disabled");
+                  $("#lug_exp_doc").attr("readonly",'readonly');
+                  $("#name").attr("readonly",'readonly');
+                  $("#last_name").attr("readonly",'readonly');
+                  $("#direccion").attr("readonly",'readonly');
+                  $("#telefono").attr("readonly",'readonly');
+                  $("#email").attr("readonly",'readonly');
+                  $("#ing_mensuales").attr("readonly",'readonly');
+                  $("#type_doc").attr("readonly",'readonly');
+                }else{
+                   $("#referencia_id").attr("disabled",'disabled');
+                   $("#lug_exp_doc").removeAttr("readonly");
+                  $("#name").removeAttr("readonly");
+                  $("#last_name").removeAttr("readonly");
+                  $("#direccion").removeAttr("readonly");
+                  $("#telefono").removeAttr("readonly");
+                  $("#email").removeAttr("readonly");
+                  $("#ing_mensuales").removeAttr("readonly");
+                  $("#type_doc").removeAttr("readonly");
+
+                  $("#lug_exp_doc").val('');
+                  $("#name").val('');
+                  $("#last_name").val('');
+                  $("#direccion").val('');
+                  $("#telefono").val('');
+                  $("#email").val('');
+                  $("#ing_mensuales").val('');
+                  $("#referencia_id").val('');
+                }                    //console.log(v);
+                  },
+                error: function(xhr, textStatus, thrownError) {
+                  
+                   alert("error");
+                    
+                }
+             });
+
+   });
    ////////////////////////////////////////////////////////////////////////////
 /*   $("#btnGuaLab").click(function(){
     //form = $("#formGuaLab");
@@ -239,4 +311,39 @@ function showF(id){
   $("#fila"+id).toggle();
   $("#filaRe"+id).toggle();
   //alert(id);
+}
+
+function isEmptyJSON(obj) {
+  for(var i in obj) { return false; }
+  return true;
+}
+function confirmar(){
+
+  var confirm = confirm("Hola");
+  if (confirm) {
+    return true;
+  }else{
+    return false;
+  }
+
+}
+function searchRef(id){
+       urli = "/admin/referencias/buscar/";
+       $.ajax({
+                url: urli,
+                type: 'POST',
+                cache: false,
+                data: {'id':id},                
+                beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));
+                },
+                success: function(respu) {
+                     console.log(respu);
+                  },
+                error: function(xhr, textStatus, thrownError) {
+                  
+                   alert("error");
+                    
+                }
+             });
 }
